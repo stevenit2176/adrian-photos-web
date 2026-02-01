@@ -31,8 +31,8 @@ export async function onRequestDelete(context: any): Promise<Response> {
     }
 
     // Delete from R2
-    if (photo.r2Key) {
-      await deleteFromR2(env.R2, photo.r2Key);
+    if (photo.r2_key) {
+      await deleteFromR2(env.R2, photo.r2_key);
     }
 
     // Delete from database
