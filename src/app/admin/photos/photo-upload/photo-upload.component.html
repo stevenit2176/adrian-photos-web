@@ -1,0 +1,123 @@
+<div class="photo-upload-container">
+  <div class="header">
+    <h1>Upload Photo</h1>
+    <button mat-button (click)="cancel()">
+      <mat-icon>arrow_back</mat-icon>
+      Back to Photos
+    </button>
+  </div>
+
+  <div class="upload-content">
+    <mat-card class="upload-card">
+      <mat-card-content>
+        <!-- File Drop Zone -->
+        <div class="drop-zone"
+             [class.dragging]="isDragging"
+             [class.has-file]="selectedFile"
+             (dragover)="onDragOver($event)"
+             (dragleave)="onDragLeave($event)"
+             (drop)="onDrop($event)"
+             (click)="fileInput.click()">
+          
+          <div *ngIf="!imagePreview" class="drop-zone-content">
+            <mat-icon class="upload-icon">cloud_upload</mat-icon>
+            <h3>Drag & Drop Photo Here</h3>
+            <p>or click to browse</p>
+            <p class="file-info">Supported: JPEG, PNG, WebP, GIF (Max 10MB)</p>
+          </div>
+
+          <div *ngIf="imagePreview" class="preview-container">
+            <img [src]="imagePreview" alt="Preview" class="preview-image">
+            <button mat-icon-button 
+                    class="remove-button" 
+                    (click)="removeFile(); $event.stopPropagation()">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+
+          <input #fileInput
+                 type="file"
+                 accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
+                 (change)="onFileSelected($event)"
+                 style="display: none;">
+        </div>
+
+        <!-- Upload Form -->
+        <form [formGroup]="uploadForm" (ngSubmit)="onSubmit()" class="upload-form">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Title</mat-label>
+            <input matInput formControlName="title" placeholder="Enter photo title">
+            <mat-error *ngIf="uploadForm.get('title')?.hasError('required')">
+              Title is required
+            </mat-error>
+            <mat-error *ngIf="uploadForm.get('title')?.hasError('minlength')">
+              Title must be at least 3 characters
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Description</mat-label>
+            <textarea matInput 
+                      formControlName="description" 
+                      rows="4"
+                      placeholder="Enter photo description"></textarea>
+            <mat-error *ngIf="uploadForm.get('description')?.hasError('required')">
+              Description is required
+            </mat-error>
+            <mat-error *ngIf="uploadForm.get('description')?.hasError('minlength')">
+              Description must be at least 10 characters
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Category</mat-label>
+            <mat-select formControlName="categoryId">
+              <mat-option *ngFor="let category of categories" [value]="category.id">
+                {{ category.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="uploadForm.get('categoryId')?.hasError('required')">
+              Category is required
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Base Price (cents)</mat-label>
+            <input matInput 
+                   type="number" 
+                   formControlName="price" 
+                   min="0"
+                   placeholder="e.g., 4999 for $49.99">
+            <mat-hint>Enter price in cents (e.g., 4999 = $49.99)</mat-hint>
+            <mat-error *ngIf="uploadForm.get('price')?.hasError('min')">
+              Price must be 0 or greater
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Upload Progress -->
+          <div *ngIf="isUploading" class="upload-progress">
+            <p>Uploading... {{ uploadProgress }}%</p>
+            <mat-progress-bar mode="determinate" [value]="uploadProgress"></mat-progress-bar>
+          </div>
+
+          <!-- Actions -->
+          <div class="form-actions">
+            <button mat-raised-button 
+                    color="primary" 
+                    type="submit"
+                    [disabled]="!canSubmit()">
+              <mat-icon>cloud_upload</mat-icon>
+              Upload Photo
+            </button>
+            <button mat-button 
+                    type="button" 
+                    (click)="resetForm()"
+                    [disabled]="isUploading">
+              Reset
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

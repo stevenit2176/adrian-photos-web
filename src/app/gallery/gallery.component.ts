@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule, ActivatedRoute } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { CategoryService, Category } from '../services/category.service';
 
 interface Photo {
   id: number;
@@ -12,9 +14,7 @@ interface Photo {
   description: string;
 }
 
-interface Category {
-  name: string;
-  description: string;
+interface CategoryDisplay extends Category {
   imageUrl: string;
   photoCount: number;
 }
@@ -24,6 +24,7 @@ interface Category {
   standalone: true,
   imports: [
     CommonModule,
+    RouterModule,
     MatCardModule,
     MatButtonModule,
     MatIconModule,
@@ -32,9 +33,10 @@ interface Category {
   templateUrl: './gallery.component.html',
   styleUrls: ['./gallery.component.scss']
 })
-export class GalleryComponent {
+export class GalleryComponent implements OnInit {
   currentSlide = 0;
   autoPlayInterval: any;
+  selectedCategory: string | null = null;
 
   // Sample carousel photos
   carouselPhotos: Photo[] = [
@@ -64,48 +66,47 @@ export class GalleryComponent {
     }
   ];
 
-  // Sample categories
-  categories: Category[] = [
-    {
-      name: 'Landscapes',
-      description: 'Stunning natural vistas and scenery',
-      imageUrl: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop',
-      photoCount: 24
-    },
-    {
-      name: 'Urban',
-      description: 'City life and architecture',
-      imageUrl: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400&h=300&fit=crop',
-      photoCount: 18
-    },
-    {
-      name: 'Abstract',
-      description: 'Modern abstract compositions',
-      imageUrl: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=400&h=300&fit=crop',
-      photoCount: 32
-    },
-    {
-      name: 'Portraits',
-      description: 'People and emotions',
-      imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop',
-      photoCount: 16
-    },
-    {
-      name: 'Wildlife',
-      description: 'Animals in their natural habitat',
-      imageUrl: 'https://images.unsplash.com/photo-1484406566174-9da000fda645?w=400&h=300&fit=crop',
-      photoCount: 20
-    },
-    {
-      name: 'Black & White',
-      description: 'Timeless monochrome photography',
-      imageUrl: 'https://images.unsplash.com/photo-1493106641515-6b5631de4bb9?w=400&h=300&fit=crop',
-      photoCount: 28
-    }
-  ];
+  // Categories loaded from API
+  categories: CategoryDisplay[] = [];
+  
+  // Default images for categories (fallback)
+  private defaultImages: { [key: string]: string } = {
+    'landscapes': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop',
+    'urban': 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400&h=300&fit=crop',
+    'abstract': 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=400&h=300&fit=crop',
+    'portraits': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop',
+    'wildlife': 'https://images.unsplash.com/photo-1484406566174-9da000fda645?w=400&h=300&fit=crop',
+    'black-white': 'https://images.unsplash.com/photo-1493106641515-6b5631de4bb9?w=400&h=300&fit=crop'
+  };
+  
+  constructor(
+    private categoryService: CategoryService,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
     this.startAutoPlay();
+    this.loadCategories();
+    
+    // Check for category filter in query params
+    this.route.queryParams.subscribe(params => {
+      this.selectedCategory = params['category'] || null;
+    });
+  }
+  
+  loadCategories(): void {
+    this.categoryService.getCategories().subscribe({
+      next: (categories) => {
+        this.categories = categories.map(cat => ({
+          ...cat,
+          imageUrl: this.defaultImages[cat.slug] || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop',
+          photoCount: 0 // Will be updated when we have real photos
+        }));
+      },
+      error: (err) => {
+        console.error('Error loading categories:', err);
+      }
+    });
   }
 
   ngOnDestroy() {

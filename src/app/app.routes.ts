@@ -5,6 +5,7 @@ import { adminGuard } from './guards/admin.guard';
 export const routes: Routes = [
   { path: '', redirectTo: '/gallery', pathMatch: 'full' },
   { path: 'gallery', loadComponent: () => import('./gallery/gallery.component').then(m => m.GalleryComponent) },
+  { path: 'photos/:id', loadComponent: () => import('./photo-detail/photo-detail.component').then(m => m.PhotoDetailComponent) },
   { path: 'cart', loadComponent: () => import('./cart/cart.component').then(m => m.CartComponent) },
   { path: 'login', loadComponent: () => import('./auth/login/login.component').then(m => m.LoginComponent) },
   { path: 'register', loadComponent: () => import('./auth/register/register.component').then(m => m.RegisterComponent) },
@@ -19,7 +20,8 @@ export const routes: Routes = [
     canActivate: [adminGuard],
     children: [
       { path: '', loadComponent: () => import('./admin/dashboard/dashboard.component').then(m => m.AdminDashboardComponent) },
-      { path: 'photos', loadComponent: () => import('./admin/dashboard/dashboard.component').then(m => m.AdminDashboardComponent) }, // TODO: Create PhotoListComponent
+      { path: 'photos', loadComponent: () => import('./admin/photos/photo-list/photo-list.component').then(m => m.PhotoListComponent) },
+      { path: 'photos/upload', loadComponent: () => import('./admin/photos/photo-upload/photo-upload.component').then(m => m.PhotoUploadComponent) },
       { path: 'categories', loadComponent: () => import('./admin/dashboard/dashboard.component').then(m => m.AdminDashboardComponent) }, // TODO: Create CategoryListComponent
       { path: 'orders', loadComponent: () => import('./admin/dashboard/dashboard.component').then(m => m.AdminDashboardComponent) }, // TODO: Create OrderListComponent
       { path: 'products', loadComponent: () => import('./admin/dashboard/dashboard.component').then(m => m.AdminDashboardComponent) }, // TODO: Create ProductListComponent

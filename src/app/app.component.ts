@@ -1,12 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatDividerModule } from '@angular/material/divider';
 import { AuthService } from './services/auth.service';
 import { CartIconComponent } from './shared/cart-icon/cart-icon.component';
+import { CategoryService, Category } from './services/category.service';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +21,7 @@ import { CartIconComponent } from './shared/cart-icon/cart-icon.component';
     MatButtonModule,
     MatIconModule,
     MatMenuModule,
+    MatDividerModule,
     CartIconComponent
   ],
   template: `
@@ -26,8 +29,24 @@ import { CartIconComponent } from './shared/cart-icon/cart-icon.component';
       <a routerLink="/" class="logo">Adrian Photos</a>
       <span class="spacer"></span>
       <nav>
-        <app-cart-icon></app-cart-icon>
         <a mat-button routerLink="/gallery">Gallery</a>
+        <button mat-button [matMenuTriggerFor]="categoriesMenu">
+          Categories
+          <mat-icon>arrow_drop_down</mat-icon>
+        </button>
+        <mat-menu #categoriesMenu="matMenu">
+          <button mat-menu-item 
+                  *ngFor="let category of categories" 
+                  [routerLink]="['/gallery']" 
+                  [queryParams]="{categoryId: category.id}">
+            {{ category.name }}
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item [routerLink]="['/gallery']">
+            All Categories
+          </button>
+        </mat-menu>
+        <app-cart-icon></app-cart-icon>
         
         @if (authService.currentUser$ | async; as user) {
           <!-- Authenticated user menu -->
@@ -151,10 +170,29 @@ import { CartIconComponent } from './shared/cart-icon/cart-icon.component';
     }
   `]
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'Adrian Photos';
+  categories: Category[] = [];
 
-  constructor(public authService: AuthService) {}
+  constructor(
+    public authService: AuthService,
+    private categoryService: CategoryService
+  ) {}
+  
+  ngOnInit(): void {
+    this.loadCategories();
+  }
+  
+  loadCategories(): void {
+    this.categoryService.getCategories().subscribe({
+      next: (categories) => {
+        this.categories = categories;
+      },
+      error: (err) => {
+        console.error('Error loading categories:', err);
+      }
+    });
+  }
 
   logout(): void {
     this.authService.logout().subscribe();

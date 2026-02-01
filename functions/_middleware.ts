@@ -1,12 +1,63 @@
 /**
  * Global middleware for all Functions
- * Handles CORS, error handling, and request logging
+ * Handles CORS, error handling, request logging, and image serving
  */
 
 import { corsHeaders, handleCorsPreflightRequest, addCorsHeaders } from './lib/middleware';
+import { getFromR2 } from './lib/r2';
 
 export async function onRequest(context: any): Promise<Response> {
-  const { request } = context;
+  const { request, env } = context;
+  const url = new URL(request.url);
+  
+  // Handle image serving from R2
+  if (url.pathname.startsWith('/api/photos/image/')) {
+    try {
+      // Extract the R2 key (everything after /api/photos/image/)
+      const r2Key = url.pathname.substring('/api/photos/image/'.length);
+      
+      if (!r2Key) {
+        const errorResponse = new Response(JSON.stringify({ error: 'Image path is required' }), {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' }
+        });
+        return addCorsHeaders(errorResponse);
+      }
+
+      console.log('Fetching image from R2:', r2Key);
+
+      // Get the image from R2
+      const object = await getFromR2(env.R2, r2Key);
+
+      if (!object) {
+        console.error('Image not found in R2:', r2Key);
+        const notFoundResponse = new Response(JSON.stringify({ error: 'Image not found' }), {
+          status: 404,
+          headers: { 'Content-Type': 'application/json' }
+        });
+        return addCorsHeaders(notFoundResponse);
+      }
+
+      // Return the image with appropriate headers
+      const headers = new Headers();
+      headers.set('Content-Type', object.httpMetadata?.contentType || 'image/jpeg');
+      headers.set('Cache-Control', 'public, max-age=31536000, immutable');
+      
+      if (object.httpEtag) {
+        headers.set('ETag', object.httpEtag);
+      }
+
+      const imageResponse = new Response(object.body, { headers });
+      return addCorsHeaders(imageResponse);
+    } catch (error: any) {
+      console.error('Serve image error:', error);
+      const errorResponse = new Response(JSON.stringify({ error: `Failed to serve image: ${error.message}` }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
+      return addCorsHeaders(errorResponse);
+    }
+  }
   
   // Handle CORS preflight
   if (request.method === 'OPTIONS') {
@@ -14,8 +65,8 @@ export async function onRequest(context: any): Promise<Response> {
   }
   
   // Log request in development
-  if (context.env.ENVIRONMENT === 'development') {
-    console.log(`${request.method} ${new URL(request.url).pathname}`);
+  if (env.ENVIRONMENT === 'development') {
+    console.log(`${request.method} ${url.pathname}`);
   }
   
   try {

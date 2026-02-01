@@ -129,16 +129,25 @@ interface NavItem {
         &:hover {
           background: rgba(255, 255, 255, 0.05);
           color: #e2bf55;
+          
+          mat-icon {
+            color: #e2bf55;
+          }
         }
         
         &.active {
           background: rgba(226, 191, 85, 0.15);
           color: #e2bf55;
           border-left: 4px solid #e2bf55;
+          
+          mat-icon {
+            color: #e2bf55;
+          }
         }
         
         mat-icon {
-          color: inherit;
+          color: rgba(255, 255, 255, 0.8);
+          transition: all 0.3s ease;
         }
       }
     }

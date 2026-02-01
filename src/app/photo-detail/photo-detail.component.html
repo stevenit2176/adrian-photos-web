@@ -1,0 +1,92 @@
+<div class="photo-detail-container" *ngIf="!loading">
+  <div *ngIf="error" class="error-message">
+    <mat-icon>error</mat-icon>
+    <h2>{{ error }}</h2>
+    <button mat-raised-button color="primary" (click)="goBack()">
+      Back to Gallery
+    </button>
+  </div>
+
+  <div *ngIf="photo && !error" class="photo-detail">
+    <button mat-icon-button class="back-button" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+
+    <div class="photo-content">
+      <div class="photo-image-section">
+        <img [src]="getPhotoUrl()" [alt]="photo.title" class="photo-image">
+      </div>
+
+      <div class="photo-info-section">
+        <mat-card class="info-card">
+          <mat-card-header>
+            <mat-card-title>{{ photo.title }}</mat-card-title>
+            <mat-card-subtitle>{{ photo.categoryName }}</mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content>
+            <p class="description">{{ photo.description }}</p>
+
+            <div class="product-selection">
+              <h3>Select Product & Size</h3>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Product Type</mat-label>
+                <mat-select [(ngModel)]="selectedProduct" (selectionChange)="onProductChange()">
+                  <mat-option *ngFor="let product of products" [value]="product">
+                    {{ product.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width" *ngIf="selectedProduct">
+                <mat-label>Size</mat-label>
+                <mat-select [(ngModel)]="selectedSize">
+                  <mat-option *ngFor="let size of selectedProduct.sizes" [value]="size">
+                    {{ size.name }} - {{ formatPrice(size.basePrice) }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="quantity-field">
+                <mat-label>Quantity</mat-label>
+                <input matInput type="number" [(ngModel)]="quantity" min="1" max="99">
+              </mat-form-field>
+
+              <div class="price-summary" *ngIf="selectedSize">
+                <div class="price-row">
+                  <span>Price:</span>
+                  <span class="price">{{ formatPrice(selectedSize.basePrice) }}</span>
+                </div>
+                <div class="price-row total" *ngIf="quantity > 1">
+                  <span>Total ({{ quantity }} items):</span>
+                  <span class="price">{{ formatPrice(selectedSize.basePrice * quantity) }}</span>
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+
+          <mat-card-actions>
+            <button 
+              mat-raised-button 
+              color="primary" 
+              class="add-to-cart-btn"
+              [disabled]="!canAddToCart()"
+              (click)="addToCart()">
+              <mat-icon>add_shopping_cart</mat-icon>
+              Add to Cart
+            </button>
+            <button mat-button routerLink="/gallery">
+              Continue Shopping
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="loading" class="loading">
+  <mat-icon class="spinner">refresh</mat-icon>
+  <p>Loading photo...</p>
+</div>

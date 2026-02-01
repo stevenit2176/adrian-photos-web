@@ -59,11 +59,16 @@ export async function onRequestGet(context: any): Promise<Response> {
 
     // Get paginated results
     const photos = await query(env.DB, sql, sqlParams);
-    const { data, pagination } = paginate(photos, page, limit);
+    const paginationResult = paginate(photos, page, limit);
 
     return successResponse({
-      photos: data,
-      pagination,
+      photos: paginationResult.items,
+      pagination: {
+        page: paginationResult.page,
+        limit,
+        total: paginationResult.total,
+        totalPages: paginationResult.pages,
+      },
     });
   } catch (error: any) {
     console.error('List photos error:', error);

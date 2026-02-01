@@ -1,0 +1,245 @@
+.photo-detail-container {
+  min-height: calc(100vh - 64px);
+  background: #f5f7fa;
+  padding: 40px 20px;
+}
+
+.back-button {
+  position: fixed;
+  top: 80px;
+  left: 20px;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  
+  mat-icon {
+    color: #616e76;
+  }
+}
+
+.error-message {
+  text-align: center;
+  padding: 80px 20px;
+  
+  mat-icon {
+    font-size: 80px;
+    width: 80px;
+    height: 80px;
+    color: #f44336;
+    margin-bottom: 20px;
+  }
+  
+  h2 {
+    font-family: 'Prata', serif;
+    color: #616e76;
+    margin: 0 0 24px 0;
+  }
+}
+
+.photo-detail {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.photo-content {
+  display: grid;
+  grid-template-columns: 1fr 500px;
+  gap: 40px;
+  align-items: start;
+}
+
+.photo-image-section {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  
+  .photo-image {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+}
+
+.photo-info-section {
+  position: sticky;
+  top: 80px;
+}
+
+.info-card {
+  mat-card-header {
+    margin-bottom: 24px;
+    
+    mat-card-title {
+      font-family: 'Prata', serif;
+      font-size: 32px;
+      color: #616e76;
+      margin-bottom: 8px;
+    }
+    
+    mat-card-subtitle {
+      font-family: 'Barlow', sans-serif;
+      font-size: 16px;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+  }
+  
+  .description {
+    font-family: 'Barlow', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #666;
+    margin-bottom: 32px;
+  }
+  
+  .product-selection {
+    h3 {
+      font-family: 'Prata', serif;
+      font-size: 20px;
+      color: #616e76;
+      margin: 0 0 20px 0;
+    }
+    
+    .full-width {
+      width: 100%;
+      margin-bottom: 16px;
+    }
+    
+    .quantity-field {
+      width: 120px;
+      
+      input {
+        font-family: 'Barlow', sans-serif;
+        font-weight: 600;
+      }
+    }
+  }
+  
+  .price-summary {
+    margin: 24px 0;
+    padding: 20px;
+    background: #f5f7fa;
+    border-radius: 8px;
+    
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Barlow', sans-serif;
+      font-size: 16px;
+      color: #666;
+      margin-bottom: 12px;
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+      
+      &.total {
+        font-size: 20px;
+        font-weight: 800;
+        color: #616e76;
+        padding-top: 12px;
+        border-top: 2px solid #e0e0e0;
+        margin-top: 12px;
+      }
+      
+      .price {
+        font-weight: 700;
+        color: #616e76;
+      }
+    }
+  }
+  
+  mat-card-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+    
+    .add-to-cart-btn {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 800;
+      font-size: 16px;
+      padding: 12px 24px;
+      background-color: #e2bf55 !important;
+      color: #616e76 !important;
+      
+      mat-icon {
+        margin-right: 8px;
+      }
+      
+      &:disabled {
+        background-color: #ddd !important;
+        color: #999 !important;
+      }
+    }
+    
+    button[mat-button] {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600;
+    }
+  }
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  
+  .spinner {
+    font-size: 60px;
+    width: 60px;
+    height: 60px;
+    color: #616e76;
+    animation: spin 1s linear infinite;
+  }
+  
+  p {
+    font-family: 'Barlow', sans-serif;
+    font-size: 16px;
+    color: #999;
+    margin-top: 16px;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 1024px) {
+  .photo-content {
+    grid-template-columns: 1fr;
+  }
+  
+  .photo-info-section {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .photo-detail-container {
+    padding: 20px 10px;
+  }
+  
+  .back-button {
+    top: 70px;
+    left: 10px;
+  }
+  
+  .info-card {
+    mat-card-header {
+      mat-card-title {
+        font-size: 24px;
+      }
+    }
+  }
+}
