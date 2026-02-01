@@ -1,0 +1,74 @@
+/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+// Define a light theme with typography
+$theme: mat.define-theme((
+  color: (
+    theme-type: light,
+    primary: mat.$azure-palette,
+  ),
+  typography: (
+    brand-family: 'Mona Sans',
+    plain-family: 'Mona Sans',
+    bold-weight: 800,
+    medium-weight: 600,
+    regular-weight: 400,
+  ),
+));
+
+html {
+  @include mat.all-component-themes($theme);
+  
+  // Override Material colors with your custom colors using CSS variables
+  --mat-toolbar-container-background-color: #616e76;
+  --mat-toolbar-container-text-color: #ffffff;
+  
+  // Primary color overrides
+  --mdc-filled-button-container-color: #616e76;
+  --mdc-protected-button-container-color: #616e76;
+  --mat-fab-foreground-color: #ffffff;
+  --mat-fab-background-color: #1d2833;
+  
+  // Secondary/Accent color
+  --mat-accent-color: #e2bf55;
+  --mdc-text-button-label-text-color: #e2bf55;
+}
+
+/* Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Mona Sans', sans-serif;
+  background-color: #fafafa;
+}
+
+/* Typography */
+h1, h2 {
+  font-family: 'Prata', serif;
+  font-weight: 400;
+}
+
+h3, h4, h5, h6 {
+  font-family: 'Mona Sans', sans-serif;
+  font-weight: 800;
+}
+
+p, span, a, button, input, textarea, label {
+  font-family: 'Mona Sans', sans-serif;
+}
+
+/* Custom Material overrides */
+.mat-toolbar {
+  font-family: 'Mona Sans', sans-serif !important;
+}
+
+.mat-mdc-card {
+  border-radius: 8px !important;
+}
