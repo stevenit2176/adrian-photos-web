@@ -55,7 +55,7 @@ import { MatIconModule } from '@angular/material/icon';
     }
 
     nav button {
-      font-family: 'Mona Sans', sans-serif;
+      font-family: 'Barlow', sans-serif;
       font-size: 16px;
       font-weight: 400;
       letter-spacing: 0.5px;
