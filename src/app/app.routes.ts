@@ -12,5 +12,18 @@ export const routes: Routes = [
   // Example: { path: 'profile', loadComponent: () => import('./profile/profile.component').then(m => m.ProfileComponent), canActivate: [authGuard] },
   
   // Admin routes (require admin role)
-  // Example: { path: 'admin', loadComponent: () => import('./admin/admin.component').then(m => m.AdminComponent), canActivate: [adminGuard] }
+  {
+    path: 'admin',
+    loadComponent: () => import('./admin/layout/admin-layout.component').then(m => m.AdminLayoutComponent),
+    canActivate: [adminGuard],
+    children: [
+      { path: '', loadComponent: () => import('./admin/dashboard/dashboard.component').then(m => m.AdminDashboardComponent) },
+      { path: 'photos', loadComponent: () => import('./admin/dashboard/dashboard.component').then(m => m.AdminDashboardComponent) }, // TODO: Create PhotoListComponent
+      { path: 'categories', loadComponent: () => import('./admin/dashboard/dashboard.component').then(m => m.AdminDashboardComponent) }, // TODO: Create CategoryListComponent
+      { path: 'orders', loadComponent: () => import('./admin/dashboard/dashboard.component').then(m => m.AdminDashboardComponent) }, // TODO: Create OrderListComponent
+      { path: 'products', loadComponent: () => import('./admin/dashboard/dashboard.component').then(m => m.AdminDashboardComponent) }, // TODO: Create ProductListComponent
+      { path: 'analytics', loadComponent: () => import('./admin/dashboard/dashboard.component').then(m => m.AdminDashboardComponent) }, // TODO: Create AnalyticsComponent
+      { path: 'settings', loadComponent: () => import('./admin/dashboard/dashboard.component').then(m => m.AdminDashboardComponent) } // TODO: Create SettingsComponent
+    ]
+  }
 ];

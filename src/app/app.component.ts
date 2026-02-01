@@ -39,6 +39,12 @@ import { AuthService } from './services/auth.service';
                 <div class="user-role">Admin</div>
               }
             </div>
+            @if (user.role === 'admin') {
+              <button mat-menu-item routerLink="/admin">
+                <mat-icon>dashboard</mat-icon>
+                Admin Dashboard
+              </button>
+            }
             <button mat-menu-item (click)="logout()">
               <mat-icon>logout</mat-icon>
               Logout
