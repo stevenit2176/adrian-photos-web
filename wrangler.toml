@@ -6,7 +6,7 @@ pages_build_output_dir = "dist/adrian-photos-web/browser"
 [[d1_databases]]
 binding = "DB"
 database_name = "adrian-photos-db"
-database_id = "placeholder" # Run: wrangler d1 create adrian-photos-db
+database_id = "a11f4c12-3da5-4c23-a82c-8503f08109a8"
 
 # R2 Storage binding
 [[r2_buckets]]
@@ -20,17 +20,25 @@ JWT_ACCESS_EXPIRY = "15m"
 JWT_REFRESH_EXPIRY = "7d"
 ENVIRONMENT = "development"
 
-# Secrets (set via CLI):
-# wrangler secret put JWT_SECRET
-# wrangler secret put STRIPE_SECRET_KEY
-# wrangler secret put STRIPE_WEBHOOK_SECRET
-# wrangler secret put BAYPHOTO_API_KEY
-
-# Local development environment variables
-[env.development.vars]
-ENVIRONMENT = "development"
-
 # Production environment
 [env.production]
+
+[[env.production.d1_databases]]
+binding = "DB"
+database_name = "adrian-photos-db"
+database_id = "a11f4c12-3da5-4c23-a82c-8503f08109a8"
+
+[[env.production.r2_buckets]]
+binding = "R2"
+bucket_name = "adrian-photos"
+
 [env.production.vars]
+JWT_ACCESS_EXPIRY = "15m"
+JWT_REFRESH_EXPIRY = "7d"
 ENVIRONMENT = "production"
+
+# Secrets for production (set via Cloudflare Dashboard):
+# JWT_SECRET = "35d4b8cd-8e2e-4491-8412-e30e59d1944e" (set as encrypted environment variable)
+# STRIPE_SECRET_KEY (when needed)
+# STRIPE_WEBHOOK_SECRET (when needed)
+# BAYPHOTO_API_KEY (when needed)

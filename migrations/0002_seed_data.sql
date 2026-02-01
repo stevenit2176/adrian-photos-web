@@ -2,18 +2,9 @@
 -- Seed Data
 -- Migration: 0002
 
--- Create admin user
--- Default password: Admin123! (CHANGE THIS IN PRODUCTION)
--- Password hash generated with bcrypt, rounds=10
-INSERT INTO users (id, email, password_hash, first_name, last_name, role) 
-VALUES (
-  'admin-001',
-  'admin@adrianphotos.com',
-  '$2a$10$rW8YJz9Y5qZ5GqZ5GqZ5Ge5qZ5GqZ5GqZ5GqZ5GqZ5GqZ5GqZ5Gq',
-  'Admin',
-  'User',
-  'admin'
-);
+-- NOTE: Admin user should be created manually after deployment
+-- Run: npx tsx scripts/create-admin.ts
+-- Then: wrangler d1 execute adrian-photos-db --remote --command="INSERT INTO users..."
 
 -- Insert categories
 INSERT INTO categories (id, name, slug, description, display_order, is_active) VALUES

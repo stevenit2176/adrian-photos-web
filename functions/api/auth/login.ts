@@ -88,6 +88,8 @@ export async function onRequestPost(context: any): Promise<Response> {
       return errorResponse(error.message, 400, 'VALIDATION_ERROR');
     }
     console.error('Login error:', error);
-    return errorResponse('Login failed', 500, 'SERVER_ERROR');
+    console.error('Error stack:', error.stack);
+    console.error('Error message:', error.message);
+    return errorResponse(`Login failed: ${error.message}`, 500, 'SERVER_ERROR');
   }
 }
