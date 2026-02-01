@@ -1,0 +1,122 @@
+<div class="register-container">
+  <mat-card class="register-card">
+    <mat-card-header>
+      <mat-card-title>Create Account</mat-card-title>
+      <mat-card-subtitle>Join Adrian Photos today</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <div class="name-fields">
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>First Name</mat-label>
+            <input 
+              matInput 
+              type="text" 
+              formControlName="firstName"
+              placeholder="John"
+              autocomplete="given-name"
+            >
+            <mat-icon matPrefix>person</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Last Name</mat-label>
+            <input 
+              matInput 
+              type="text" 
+              formControlName="lastName"
+              placeholder="Doe"
+              autocomplete="family-name"
+            >
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Email</mat-label>
+          <input 
+            matInput 
+            type="email" 
+            formControlName="email"
+            placeholder="you@example.com"
+            autocomplete="email"
+          >
+          <mat-icon matPrefix>email</mat-icon>
+          <mat-error>{{ getEmailError() }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Password</mat-label>
+          <input 
+            matInput 
+            [type]="hidePassword ? 'password' : 'text'"
+            formControlName="password"
+            placeholder="Create a strong password"
+            autocomplete="new-password"
+          >
+          <mat-icon matPrefix>lock</mat-icon>
+          <button 
+            mat-icon-button 
+            matSuffix 
+            type="button"
+            (click)="hidePassword = !hidePassword"
+            [attr.aria-label]="'Hide password'"
+          >
+            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-error>{{ getPasswordError() }}</mat-error>
+          @if (registerForm.get('password')?.value && !registerForm.get('password')?.hasError('required')) {
+            <mat-hint [class]="'password-strength-' + getPasswordStrength()">
+              Strength: {{ getPasswordStrength() }}
+            </mat-hint>
+          }
+        </mat-form-field>
+
+        <div class="password-requirements">
+          <div class="requirement-title">Password must contain:</div>
+          <div class="requirements-list">
+            <div class="requirement" [class.met]="registerForm.get('password')?.value?.length >= 8">
+              <mat-icon>{{ registerForm.get('password')?.value?.length >= 8 ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+              At least 8 characters
+            </div>
+            <div class="requirement" [class.met]="registerForm.get('password')?.value && /[A-Z]/.test(registerForm.get('password')?.value)">
+              <mat-icon>{{ registerForm.get('password')?.value && /[A-Z]/.test(registerForm.get('password')?.value) ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+              One uppercase letter
+            </div>
+            <div class="requirement" [class.met]="registerForm.get('password')?.value && /[a-z]/.test(registerForm.get('password')?.value)">
+              <mat-icon>{{ registerForm.get('password')?.value && /[a-z]/.test(registerForm.get('password')?.value) ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+              One lowercase letter
+            </div>
+            <div class="requirement" [class.met]="registerForm.get('password')?.value && /[0-9]/.test(registerForm.get('password')?.value)">
+              <mat-icon>{{ registerForm.get('password')?.value && /[0-9]/.test(registerForm.get('password')?.value) ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+              One number
+            </div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button 
+            mat-raised-button 
+            color="primary" 
+            type="submit"
+            [disabled]="registerForm.invalid || loading"
+            class="register-button"
+          >
+            @if (loading) {
+              <mat-spinner diameter="20"></mat-spinner>
+            } @else {
+              Create Account
+            }
+          </button>
+        </div>
+      </form>
+
+      <div class="login-link">
+        Already have an account? 
+        <a routerLink="/login" [queryParams]="{ returnUrl: returnUrl }">
+          Sign in
+        </a>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

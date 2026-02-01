@@ -15,6 +15,7 @@ bucket_name = "adrian-photos"
 
 # Environment variables (non-sensitive)
 [vars]
+JWT_SECRET = "dev-secret-key-change-in-production-min-32-chars-required"
 JWT_ACCESS_EXPIRY = "15m"
 JWT_REFRESH_EXPIRY = "7d"
 ENVIRONMENT = "development"

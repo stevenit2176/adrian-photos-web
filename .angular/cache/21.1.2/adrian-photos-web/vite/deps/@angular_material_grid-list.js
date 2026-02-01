@@ -1,10 +1,11 @@
+import "./chunk-URNHFZD6.js";
 import {
   coerceNumberProperty
-} from "./chunk-UOTIGRPS.js";
+} from "./chunk-LBPJ2FKO.js";
 import {
   BidiModule,
   Directionality
-} from "./chunk-GBDOB3A5.js";
+} from "./chunk-J7LDFMA4.js";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -17,7 +18,6 @@ import {
   ViewEncapsulation,
   inject,
   setClassMetadata,
-  startWith,
   ɵɵProvidersFeature,
   ɵɵattribute,
   ɵɵcontentQuery,
@@ -31,7 +31,12 @@ import {
   ɵɵprojection,
   ɵɵprojectionDef,
   ɵɵqueryRefresh
-} from "./chunk-R4YJPNC2.js";
+} from "./chunk-6B6Q25JZ.js";
+import "./chunk-HWYXSU2G.js";
+import "./chunk-JRFR6BLO.js";
+import {
+  startWith
+} from "./chunk-MARUHEWW.js";
 import "./chunk-WDMUDEB6.js";
 
 // node_modules/@angular/material/fesm2022/_public-api-chunk.mjs

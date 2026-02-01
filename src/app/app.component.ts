@@ -1,28 +1,54 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
+    CommonModule,
     RouterOutlet,
+    RouterLink,
     MatToolbarModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatMenuModule
   ],
   template: `
     <mat-toolbar class="navbar">
-      <span class="logo">Adrian Photos</span>
+      <a routerLink="/" class="logo">Adrian Photos</a>
       <span class="spacer"></span>
       <nav>
-        <button mat-button>Home</button>
-        <button mat-button>Gallery</button>
-        <button mat-button>Categories</button>
-        <button mat-button>About</button>
-        <button mat-button>Contact</button>
+        <a mat-button routerLink="/gallery">Gallery</a>
+        
+        @if (authService.currentUser$ | async; as user) {
+          <!-- Authenticated user menu -->
+          <button mat-button [matMenuTriggerFor]="userMenu">
+            <mat-icon>account_circle</mat-icon>
+            {{ user.firstName || user.email }}
+          </button>
+          <mat-menu #userMenu="matMenu">
+            <div class="user-info">
+              <div class="user-email">{{ user.email }}</div>
+              @if (user.role === 'admin') {
+                <div class="user-role">Admin</div>
+              }
+            </div>
+            <button mat-menu-item (click)="logout()">
+              <mat-icon>logout</mat-icon>
+              Logout
+            </button>
+          </mat-menu>
+        } @else {
+          <!-- Guest menu -->
+          <a mat-button routerLink="/login">Login</a>
+          <a mat-button routerLink="/register" class="register-btn">Sign Up</a>
+        }
       </nav>
     </mat-toolbar>
     <router-outlet />
@@ -44,6 +70,12 @@ import { MatIconModule } from '@angular/material/icon';
       font-weight: 400;
       letter-spacing: 1px;
       color: #ffffff;
+      text-decoration: none;
+      cursor: pointer;
+      
+      &:hover {
+        opacity: 0.9;
+      }
     }
 
     .spacer {
@@ -53,8 +85,10 @@ import { MatIconModule } from '@angular/material/icon';
     nav {
       display: flex;
       gap: 8px;
+      align-items: center;
     }
 
+    nav a,
     nav button {
       font-family: 'Barlow', sans-serif;
       font-size: 16px;
@@ -63,11 +97,40 @@ import { MatIconModule } from '@angular/material/icon';
       color: #ffffff;
     }
     
+    nav a:hover,
     nav button:hover {
       background-color: rgba(226, 191, 85, 0.2);
     }
 
+    .register-btn {
+      background-color: #e2bf55 !important;
+      color: #616e76 !important;
+      font-weight: 600 !important;
+      
+      &:hover {
+        background-color: rgba(226, 191, 85, 0.9) !important;
+      }
+    }
+
+    .user-info {
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+      
+      .user-email {
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+      
+      .user-role {
+        font-size: 12px;
+        color: #e2bf55;
+        font-weight: 600;
+      }
+    }
+
     @media (max-width: 768px) {
+      nav a,
       nav button {
         font-size: 14px;
         padding: 0 8px;
@@ -81,4 +144,10 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class AppComponent {
   title = 'Adrian Photos';
+
+  constructor(public authService: AuthService) {}
+
+  logout(): void {
+    this.authService.logout().subscribe();
+  }
 }

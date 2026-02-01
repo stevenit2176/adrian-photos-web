@@ -6,26 +6,58 @@
 import { Env, JWTPayload } from './types';
 
 /**
- * Hash a password using bcrypt
- * Note: Since bcrypt is CPU-intensive, we use Web Crypto API as an alternative
- * For production, consider using a dedicated auth service or Workers KV for rate limiting
+ * Hash a password using Web Crypto API with salt
+ * Format: salt:hash (both in hex)
  */
 export async function hashPassword(password: string): Promise<string> {
-  // For Cloudflare Workers, we'll use a simple implementation
-  // In production, use bcryptjs or argon2
   const encoder = new TextEncoder();
   const data = encoder.encode(password);
-  const hash = await crypto.subtle.digest('SHA-256', data);
-  const hashArray = Array.from(new Uint8Array(hash));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  
+  // Generate random salt (16 bytes)
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const saltHex = Array.from(salt).map(b => b.toString(16).padStart(2, '0')).join('');
+  
+  // Hash password with salt using SHA-256
+  const combined = new Uint8Array([...salt, ...data]);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', combined);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  
+  // Return salt:hash format
+  return `${saltHex}:${hashHex}`;
 }
 
 /**
  * Compare a password with a hash
+ * Hash format: salt:hash (both in hex)
  */
-export async function comparePassword(password: string, hash: string): Promise<boolean> {
-  const passwordHash = await hashPassword(password);
-  return passwordHash === hash;
+export async function comparePassword(password: string, storedHash: string): Promise<boolean> {
+  try {
+    // Split stored hash into salt and hash
+    const parts = storedHash.split(':');
+    if (parts.length !== 2) {
+      return false;
+    }
+    
+    const [saltHex, expectedHashHex] = parts;
+    
+    // Convert salt from hex to Uint8Array
+    const salt = new Uint8Array(saltHex.match(/.{2}/g)!.map(byte => parseInt(byte, 16)));
+    
+    // Hash the provided password with the same salt
+    const encoder = new TextEncoder();
+    const passwordData = encoder.encode(password);
+    const combined = new Uint8Array([...salt, ...passwordData]);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', combined);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const computedHashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    
+    // Compare the computed hash with the stored hash
+    return computedHashHex === expectedHashHex;
+  } catch (error) {
+    console.error('Password comparison error:', error);
+    return false;
+  }
 }
 
 /**
