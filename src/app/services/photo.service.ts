@@ -98,6 +98,18 @@ export class PhotoService {
     );
   }
 
+  deletePhoto(id: string): Observable<void> {
+    return this.http.delete<{ success: boolean }>(
+      `${environment.apiUrl}/photos/${id}`
+    ).pipe(
+      map(response => {
+        if (!response.success) {
+          throw new Error('Failed to delete photo');
+        }
+      })
+    );
+  }
+
   getPhotoUrl(r2Key: string): string {
     // For MVP, photos will be served through the API
     // In production, you'd use a custom R2 domain

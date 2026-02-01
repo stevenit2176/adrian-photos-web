@@ -125,8 +125,17 @@ export class PhotoListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        // TODO: Implement delete API call
-        this.snackBar.open('Delete functionality coming soon', 'Close', { duration: 2000 });
+        this.isLoading = true;
+        this.photoService.deletePhoto(photo.id).subscribe({
+          next: () => {
+            this.snackBar.open('Photo deleted successfully', 'Close', { duration: 3000 });
+            this.loadPhotos(); // Reload the list
+          },
+          error: (err) => {
+            this.snackBar.open(err.message || 'Failed to delete photo', 'Close', { duration: 5000 });
+            this.isLoading = false;
+          }
+        });
       }
     });
   }
