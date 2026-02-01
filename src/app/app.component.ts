@@ -35,6 +35,7 @@ import { MatIconModule } from '@angular/material/icon';
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       background-color: #616e76 !important;
       color: #ffffff !important;
+      border-bottom: 1px solid #ffffff;
     }
 
     .logo {
