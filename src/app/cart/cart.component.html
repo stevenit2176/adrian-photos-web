@@ -1,0 +1,123 @@
+<div class="cart-container">
+  <div class="cart-header">
+    <h1>Shopping Cart</h1>
+    <button mat-button color="warn" *ngIf="cart && cart.items.length > 0" (click)="clearCart()">
+      <mat-icon>delete</mat-icon>
+      Clear Cart
+    </button>
+  </div>
+
+  <div *ngIf="!cart || cart.items.length === 0" class="empty-cart">
+    <mat-icon>shopping_cart</mat-icon>
+    <h2>Your cart is empty</h2>
+    <p>Add some beautiful prints to get started!</p>
+    <button mat-raised-button color="primary" routerLink="/gallery">
+      Browse Gallery
+    </button>
+  </div>
+
+  <div *ngIf="cart && cart.items.length > 0" class="cart-content">
+    <mat-card class="cart-items">
+      <table mat-table [dataSource]="cart.items" class="cart-table">
+        <!-- Image Column -->
+        <ng-container matColumnDef="image">
+          <th mat-header-cell *matHeaderCellDef>Photo</th>
+          <td mat-cell *matCellDef="let item">
+            <img [src]="item.photoThumbnail" [alt]="item.photoTitle" class="thumbnail">
+          </td>
+        </ng-container>
+
+        <!-- Product Column -->
+        <ng-container matColumnDef="product">
+          <th mat-header-cell *matHeaderCellDef>Product</th>
+          <td mat-cell *matCellDef="let item">
+            <div class="product-info">
+              <div class="product-title">{{ item.photoTitle }}</div>
+              <div class="product-details">
+                {{ item.productTypeName }} - {{ item.productSizeName }}
+              </div>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Price Column -->
+        <ng-container matColumnDef="price">
+          <th mat-header-cell *matHeaderCellDef>Price</th>
+          <td mat-cell *matCellDef="let item">
+            {{ formatPrice(item.unitPrice) }}
+          </td>
+        </ng-container>
+
+        <!-- Quantity Column -->
+        <ng-container matColumnDef="quantity">
+          <th mat-header-cell *matHeaderCellDef>Quantity</th>
+          <td mat-cell *matCellDef="let item">
+            <div class="quantity-controls">
+              <button mat-icon-button (click)="updateQuantity(item, -1)">
+                <mat-icon>remove</mat-icon>
+              </button>
+              <span class="quantity">{{ item.quantity }}</span>
+              <button mat-icon-button (click)="updateQuantity(item, 1)">
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Total Column -->
+        <ng-container matColumnDef="total">
+          <th mat-header-cell *matHeaderCellDef>Total</th>
+          <td mat-cell *matCellDef="let item">
+            <strong>{{ formatPrice(item.total) }}</strong>
+          </td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let item">
+            <button mat-icon-button color="warn" (click)="removeItem(item.id)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </mat-card>
+
+    <mat-card class="cart-summary">
+      <mat-card-header>
+        <mat-card-title>Order Summary</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="summary-row">
+          <span>Subtotal ({{ cart.itemCount }} items)</span>
+          <span>{{ formatPrice(cart.subtotal) }}</span>
+        </div>
+        <div class="summary-row">
+          <span>Shipping</span>
+          <span>{{ cart.shipping > 0 ? formatPrice(cart.shipping) : 'Calculated at checkout' }}</span>
+        </div>
+        <div class="summary-row">
+          <span>Tax</span>
+          <span>{{ cart.tax > 0 ? formatPrice(cart.tax) : 'Calculated at checkout' }}</span>
+        </div>
+        <mat-divider></mat-divider>
+        <div class="summary-row total">
+          <span><strong>Total</strong></span>
+          <span><strong>{{ formatPrice(cart.total) }}</strong></span>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" class="checkout-btn" routerLink="/checkout">
+          Proceed to Checkout
+        </button>
+        <button mat-button routerLink="/gallery">
+          Continue Shopping
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

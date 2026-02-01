@@ -5,6 +5,7 @@ import { adminGuard } from './guards/admin.guard';
 export const routes: Routes = [
   { path: '', redirectTo: '/gallery', pathMatch: 'full' },
   { path: 'gallery', loadComponent: () => import('./gallery/gallery.component').then(m => m.GalleryComponent) },
+  { path: 'cart', loadComponent: () => import('./cart/cart.component').then(m => m.CartComponent) },
   { path: 'login', loadComponent: () => import('./auth/login/login.component').then(m => m.LoginComponent) },
   { path: 'register', loadComponent: () => import('./auth/register/register.component').then(m => m.RegisterComponent) },
   

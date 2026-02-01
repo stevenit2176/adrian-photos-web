@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { AuthService } from './services/auth.service';
+import { CartIconComponent } from './shared/cart-icon/cart-icon.component';
 
 @Component({
   selector: 'app-root',
@@ -17,13 +18,15 @@ import { AuthService } from './services/auth.service';
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
-    MatMenuModule
+    MatMenuModule,
+    CartIconComponent
   ],
   template: `
     <mat-toolbar class="navbar">
       <a routerLink="/" class="logo">Adrian Photos</a>
       <span class="spacer"></span>
       <nav>
+        <app-cart-icon></app-cart-icon>
         <a mat-button routerLink="/gallery">Gallery</a>
         
         @if (authService.currentUser$ | async; as user) {
