@@ -6,7 +6,17 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "dev": "wrangler pages dev dist/adrian-photos-web/browser --port 8788",
+    "dev:frontend": "ng serve",
+    "dev:backend": "wrangler pages dev dist/adrian-photos-web/browser --port 8788",
+    "db:create": "wrangler d1 create adrian-photos-db",
+    "db:migrate": "wrangler d1 execute adrian-photos-db --file=./migrations/0001_initial_schema.sql",
+    "db:seed": "wrangler d1 execute adrian-photos-db --file=./migrations/0002_seed_data.sql",
+    "db:migrate:local": "wrangler d1 execute adrian-photos-db --local --file=./migrations/0001_initial_schema.sql",
+    "db:seed:local": "wrangler d1 execute adrian-photos-db --local --file=./migrations/0002_seed_data.sql",
+    "r2:create": "wrangler r2 bucket create adrian-photos",
+    "deploy": "ng build && wrangler pages deploy dist/adrian-photos-web/browser"
   },
   "private": true,
   "dependencies": {
@@ -28,6 +38,7 @@
     "@angular/build": "^21.1.0",
     "@angular/cli": "^21.1.0",
     "@angular/compiler-cli": "^21.1.0",
+    "@cloudflare/workers-types": "^4.20241127.0",
     "@types/jasmine": "~5.1.0",
     "jasmine-core": "~5.1.0",
     "karma": "~6.4.0",
@@ -35,6 +46,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "typescript": "~5.9.0"
+    "typescript": "~5.9.0",
+    "wrangler": "^3.94.0"
   }
 }

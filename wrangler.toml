@@ -1,0 +1,35 @@
+name = "adrian-photos-web"
+compatibility_date = "2024-01-01"
+pages_build_output_dir = "dist/adrian-photos-web/browser"
+
+# D1 Database binding
+[[d1_databases]]
+binding = "DB"
+database_name = "adrian-photos-db"
+database_id = "placeholder" # Run: wrangler d1 create adrian-photos-db
+
+# R2 Storage binding
+[[r2_buckets]]
+binding = "R2"
+bucket_name = "adrian-photos"
+
+# Environment variables (non-sensitive)
+[vars]
+JWT_ACCESS_EXPIRY = "15m"
+JWT_REFRESH_EXPIRY = "7d"
+ENVIRONMENT = "development"
+
+# Secrets (set via CLI):
+# wrangler secret put JWT_SECRET
+# wrangler secret put STRIPE_SECRET_KEY
+# wrangler secret put STRIPE_WEBHOOK_SECRET
+# wrangler secret put BAYPHOTO_API_KEY
+
+# Local development environment variables
+[env.development.vars]
+ENVIRONMENT = "development"
+
+# Production environment
+[env.production]
+[env.production.vars]
+ENVIRONMENT = "production"
