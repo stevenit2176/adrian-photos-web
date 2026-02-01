@@ -45,11 +45,14 @@ This guide will help you deploy your Adrian Photos Web app to Cloudflare Pages v
 4. **Configure build settings:**
    - **Project name:** `adrian-photos-web` (or your preferred subdomain)
    - **Production branch:** `main`
-   - **Framework preset:** Angular
+   - **Framework preset:** Angular (or None)
    - **Build command:** `npm run build`
    - **Build output directory:** `dist/adrian-photos-web/browser`
    - **Root directory:** (leave empty)
+   - **Node version:** 18 or higher
    - **Environment variables:** None needed for now
+   
+   **Important:** Make sure the build output directory is exactly `dist/adrian-photos-web/browser` (not just `dist`)
 
 5. **Deploy:**
    - Click "Save and Deploy"

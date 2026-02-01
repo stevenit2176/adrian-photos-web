@@ -1,0 +1,6 @@
+# Wrangler configuration for Cloudflare Pages
+name = "adrian-photos-web"
+compatibility_date = "2026-02-01"
+
+[site]
+bucket = "./dist/adrian-photos-web/browser"
