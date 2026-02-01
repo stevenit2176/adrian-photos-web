@@ -25,15 +25,17 @@ html {
   --mat-toolbar-container-background-color: #616e76;
   --mat-toolbar-container-text-color: #ffffff;
   
-  // Primary color overrides
-  --mdc-filled-button-container-color: #616e76;
-  --mdc-protected-button-container-color: #616e76;
+  // Primary color overrides - using secondary color (#e2bf55) for buttons
+  --mdc-filled-button-container-color: #e2bf55;
+  --mdc-protected-button-container-color: #e2bf55;
+  --mdc-filled-button-label-text-color: #ffffff;
+  --mdc-protected-button-label-text-color: #ffffff;
   --mat-fab-foreground-color: #ffffff;
-  --mat-fab-background-color: #1d2833;
+  --mat-fab-background-color: #e2bf55;
   
   // Secondary/Accent color
   --mat-accent-color: #e2bf55;
-  --mdc-text-button-label-text-color: #e2bf55;
+  --mdc-text-button-label-text-color: #616e76;
 }
 
 /* Global Styles */
