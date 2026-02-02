@@ -1,0 +1,19 @@
+
+ ⛅️ wrangler 4.53.0 (update available 4.61.1)
+─────────────────────────────────────────────
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mWarning: Your working directory is a git repo and has uncommitted changes[0m
+
+  To silence this warning, pass in --commit-dirty=true
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mProcessing wrangler.toml configuration:[0m
+
+  
+    - "env.production" environment configuration
+      - "vars.JWT_SECRET" exists at the top level, but not on "env.production.vars".
+        This is not what you probably want, since "vars" configuration is not inherited by environments.
+        Please add "vars.JWT_SECRET" to "env.production".
+
+
+✨ Compiled Worker successfully
+Uploading... (31/34)

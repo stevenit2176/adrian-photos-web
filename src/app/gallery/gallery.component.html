@@ -8,14 +8,14 @@
         <div *ngFor="let photo of carouselPhotos; let i = index"
              class="carousel-item"
              [class.active]="i === currentSlide"
-             [routerLink]="['/photos', photo.id]"
+             [routerLink]="photo.categoryId ? ['/categories', photo.categoryId] : ['/gallery']"
              style="cursor: pointer;">
           <img [src]="photo.imageUrl" [alt]="photo.title">
           <div class="carousel-caption">
             <h1>{{ photo.title }}</h1>
             <p>{{ photo.description }}</p>
             <button mat-raised-button color="primary" class="view-details-btn">
-              View Details
+              View Gallery
             </button>
           </div>
         </div>
@@ -49,8 +49,7 @@
     <div class="categories-grid">
       <mat-card *ngFor="let category of categories" 
                 class="category-card" 
-                [routerLink]="['/gallery']" 
-                [queryParams]="{categoryId: category.id}"
+                [routerLink]="['/categories', category.id]"
                 style="cursor: pointer;">
         <div class="category-image-wrapper">
           <img mat-card-image [src]="category.imageUrl" [alt]="category.name">

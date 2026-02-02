@@ -1,0 +1,73 @@
+<div class="category-container">
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner></mat-spinner>
+    <p>Loading category...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !loading" class="error-container">
+    <mat-icon>error_outline</mat-icon>
+    <h2>{{ error }}</h2>
+    <button mat-raised-button color="primary" routerLink="/gallery">
+      <mat-icon>arrow_back</mat-icon>
+      Back to Gallery
+    </button>
+  </div>
+
+  <!-- Category Content -->
+  <div *ngIf="!loading && !error && category" class="category-content">
+    <!-- Category Header -->
+    <div class="category-header">
+      <button mat-icon-button routerLink="/gallery" class="back-button">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <div class="header-content">
+        <h1>{{ category.name }}</h1>
+        <p class="category-description">{{ category.description }}</p>
+        <p class="photo-count">{{ pagination.total }} {{ pagination.total === 1 ? 'photo' : 'photos' }}</p>
+      </div>
+    </div>
+
+    <!-- Photos Grid -->
+    <div *ngIf="photos.length > 0" class="photos-grid">
+      <mat-card *ngFor="let photo of photos" class="photo-card" [routerLink]="['/photos', photo.id]">
+        <div class="photo-image-wrapper">
+          <img mat-card-image [src]="getPhotoUrl(photo.r2Key)" [alt]="photo.title">
+          <div class="photo-overlay">
+            <mat-icon>visibility</mat-icon>
+            <span>View Details</span>
+          </div>
+        </div>
+        <mat-card-content>
+          <h3>{{ photo.title }}</h3>
+          <p class="photo-description">{{ photo.description }}</p>
+          <div class="photo-footer">
+            <span class="price">${{ photo.price.toFixed(2) }}</span>
+            <button mat-button color="primary" (click)="$event.preventDefault(); $event.stopPropagation()">
+              <mat-icon>add_shopping_cart</mat-icon>
+              Quick Add
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="photos.length === 0" class="empty-state">
+      <mat-icon>photo_library</mat-icon>
+      <h2>No photos in this category yet</h2>
+      <p>Check back soon for new additions!</p>
+      <button mat-raised-button color="primary" routerLink="/gallery">
+        Browse All Categories
+      </button>
+    </div>
+
+    <!-- Load More Button -->
+    <div *ngIf="pagination.page < pagination.totalPages" class="load-more-container">
+      <button mat-raised-button color="primary" (click)="loadMore()">
+        Load More Photos
+      </button>
+    </div>
+  </div>
+</div>

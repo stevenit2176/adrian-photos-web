@@ -12,6 +12,7 @@ interface Photo {
   title: string;
   imageUrl: string;
   description: string;
+  categoryId?: string; // Category ID for carousel linking
 }
 
 interface CategoryDisplay extends Category {
@@ -44,25 +45,29 @@ export class GalleryComponent implements OnInit {
       id: 1,
       title: 'Urban Landscapes',
       imageUrl: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=1200&h=600&fit=crop',
-      description: 'Explore the beauty of modern cityscapes'
+      description: 'Explore the beauty of modern cityscapes',
+      categoryId: '1' // Will be updated based on your actual category IDs
     },
     {
       id: 2,
       title: 'Nature Photography',
       imageUrl: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=600&fit=crop',
-      description: 'Breathtaking views from around the world'
+      description: 'Breathtaking views from around the world',
+      categoryId: '2'
     },
     {
       id: 3,
       title: 'Abstract Art',
       imageUrl: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=1200&h=600&fit=crop',
-      description: 'Contemporary abstract compositions'
+      description: 'Contemporary abstract compositions',
+      categoryId: '3'
     },
     {
       id: 4,
       title: 'Portrait Series',
       imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200&h=600&fit=crop',
-      description: 'Capturing human emotions and expressions'
+      description: 'Capturing human emotions and expressions',
+      categoryId: '4'
     }
   ];
 

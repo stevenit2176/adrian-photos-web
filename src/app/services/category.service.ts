@@ -33,4 +33,17 @@ export class CategoryService {
       })
     );
   }
+
+  getCategoryById(id: string): Observable<Category> {
+    return this.http.get<{ success: boolean; data: { category: Category } }>(
+      `${environment.apiUrl}/categories/${id}`
+    ).pipe(
+      map(response => {
+        if (response.success) {
+          return response.data.category;
+        }
+        throw new Error('Failed to fetch category');
+      })
+    );
+  }
 }
