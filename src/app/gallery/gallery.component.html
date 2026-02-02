@@ -5,18 +5,15 @@
            (mouseleave)="onCarouselMouseLeave()">
     <div class="carousel">
       <div class="carousel-inner">
-        <div *ngFor="let photo of carouselPhotos; let i = index"
+        <div *ngFor="let category of carouselPhotos; let i = index"
              class="carousel-item"
              [class.active]="i === currentSlide"
-             [routerLink]="photo.categoryId ? ['/categories', photo.categoryId] : ['/gallery']"
+             [routerLink]="['/categories', category.id]"
              style="cursor: pointer;">
-          <img [src]="photo.imageUrl" [alt]="photo.title">
+          <img [src]="category.imageUrl" [alt]="category.name">
           <div class="carousel-caption">
-            <h1>{{ photo.title }}</h1>
-            <p>{{ photo.description }}</p>
-            <button mat-raised-button color="primary" class="view-details-btn">
-              View Gallery
-            </button>
+            <h1>{{ category.name }}</h1>
+            <p>{{ category.description }}</p>
           </div>
         </div>
       </div>
@@ -31,7 +28,7 @@
 
       <!-- Indicators -->
       <div class="carousel-indicators">
-        <button *ngFor="let photo of carouselPhotos; let i = index"
+        <button *ngFor="let category of carouselPhotos; let i = index"
                 [class.active]="i === currentSlide"
                 (click)="goToSlide(i)">
         </button>
@@ -54,7 +51,7 @@
         <div class="category-image-wrapper">
           <img mat-card-image [src]="category.imageUrl" [alt]="category.name">
           <div class="overlay">
-            <button mat-raised-button color="primary">View Gallery</button>
+            <mat-icon>visibility</mat-icon>
           </div>
         </div>
         <mat-card-content>

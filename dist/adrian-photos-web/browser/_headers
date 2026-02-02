@@ -1,3 +1,15 @@
+/*.js
+  Content-Type: application/javascript
+
+/*.css
+  Content-Type: text/css
+
+/*.woff
+  Content-Type: font/woff
+
+/*.woff2
+  Content-Type: font/woff2
+
 /*
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff

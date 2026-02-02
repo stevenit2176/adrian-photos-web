@@ -10,7 +10,7 @@ export interface Category {
   slug: string;
   description: string;
   displayOrder: number;
-  isActive: boolean;
+  isActive: number | boolean; // SQLite returns 0/1
   createdAt: string;
   updatedAt: string;
 }
@@ -35,10 +35,12 @@ export class CategoryService {
   }
 
   getCategoryById(id: string): Observable<Category> {
+    console.log('CategoryService: Fetching category by ID:', id);
     return this.http.get<{ success: boolean; data: { category: Category } }>(
       `${environment.apiUrl}/categories/${id}`
     ).pipe(
       map(response => {
+        console.log('CategoryService: Received response:', response);
         if (response.success) {
           return response.data.category;
         }

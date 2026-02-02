@@ -43,7 +43,7 @@
           <h3>{{ photo.title }}</h3>
           <p class="photo-description">{{ photo.description }}</p>
           <div class="photo-footer">
-            <span class="price">${{ photo.price.toFixed(2) }}</span>
+            <span class="price">${{ (photo.price / 100).toFixed(2) }}</span>
             <button mat-button color="primary" (click)="$event.preventDefault(); $event.stopPropagation()">
               <mat-icon>add_shopping_cart</mat-icon>
               Quick Add

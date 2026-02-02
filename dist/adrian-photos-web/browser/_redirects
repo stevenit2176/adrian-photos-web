@@ -1,5 +1,5 @@
 # API routes should not be redirected - they are handled by Functions
-/api/*    200
+/api/*  200!
 
-# Redirect all other routes to index.html for Angular routing
+# Redirect all other routes to index.html for Angular routing (but not static files)
 /*    /index.html   200

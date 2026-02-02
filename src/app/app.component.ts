@@ -89,7 +89,7 @@ import { CategoryService, Category } from './services/category.service';
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       background-color: #616e76 !important;
       color: #ffffff !important;
-      border-bottom: 1px solid #ffffff;
+      border-bottom: 1px solid #e2bf55;
     }
 
     .logo {
@@ -132,7 +132,7 @@ import { CategoryService, Category } from './services/category.service';
 
     .register-btn {
       background-color: #e2bf55 !important;
-      color: #616e76 !important;
+      color: #ffffff !important;
       font-weight: 600 !important;
       
       &:hover {

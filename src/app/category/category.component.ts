@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -38,11 +38,13 @@ export class CategoryComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private categoryService: CategoryService,
-    private photoService: PhotoService
+    private photoService: PhotoService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     const categoryId = this.route.snapshot.paramMap.get('id');
+    console.log('Category component initialized with ID:', categoryId);
     if (categoryId) {
       this.loadCategory(categoryId);
       this.loadPhotos(categoryId);
@@ -53,28 +55,36 @@ export class CategoryComponent implements OnInit {
   }
 
   loadCategory(id: string): void {
+    console.log('Loading category:', id);
     this.categoryService.getCategoryById(id).subscribe({
       next: (category) => {
+        console.log('Category loaded:', category);
         this.category = category;
+        this.loading = false;
+        console.log('Loading set to false, loading:', this.loading, 'error:', this.error, 'category:', this.category);
+        this.cdr.detectChanges();
+        console.log('Change detection triggered');
       },
       error: (err) => {
-        this.error = 'Failed to load category';
         console.error('Error loading category:', err);
+        this.error = 'Failed to load category: ' + (err.message || 'Unknown error');
+        this.loading = false;
+        this.cdr.detectChanges();
       }
     });
   }
 
   loadPhotos(categoryId: string): void {
+    console.log('Loading photos for category:', categoryId);
     this.photoService.getPhotos(categoryId, this.pagination.page, this.pagination.limit).subscribe({
       next: (response: PhotosResponse) => {
+        console.log('Photos loaded:', response);
         this.photos = response.photos;
         this.pagination = response.pagination;
-        this.loading = false;
       },
       error: (err) => {
-        this.error = 'Failed to load photos';
-        this.loading = false;
         console.error('Error loading photos:', err);
+        // Don't set error for photos - category can exist without photos
       }
     });
   }

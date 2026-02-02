@@ -192,14 +192,18 @@
   height: 100%;
   background: rgba(0, 0, 0, 0.6);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   opacity: 0;
   transition: opacity 0.3s ease;
+  color: white;
   
-  button {
-    background-color: #e2bf55 !important;
-    color: #616e76 !important;
+  mat-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 8px;
   }
 }
 

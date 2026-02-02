@@ -11,6 +11,8 @@ export async function onRequestGet(context: any): Promise<Response> {
     const { env, params } = context;
     const categoryId = params.id;
 
+    console.log('Category ID requested:', categoryId);
+
     if (!categoryId) {
       return errorResponse('Category ID is required', 400, 'VALIDATION_ERROR');
     }
@@ -24,6 +26,8 @@ export async function onRequestGet(context: any): Promise<Response> {
     )
       .bind(categoryId)
       .first();
+
+    console.log('Category result:', result);
 
     if (!result) {
       return errorResponse('Category not found', 404, 'NOT_FOUND');
