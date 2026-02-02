@@ -37,8 +37,7 @@ import { CategoryService, Category } from './services/category.service';
         <mat-menu #categoriesMenu="matMenu">
           <button mat-menu-item 
                   *ngFor="let category of categories" 
-                  [routerLink]="['/gallery']" 
-                  [queryParams]="{categoryId: category.id}">
+                  [routerLink]="['/categories', category.id]">
             {{ category.name }}
           </button>
           <mat-divider></mat-divider>

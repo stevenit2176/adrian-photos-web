@@ -81,10 +81,13 @@ export class CategoryComponent implements OnInit {
         console.log('Photos loaded:', response);
         this.photos = response.photos;
         this.pagination = response.pagination;
+        this.cdr.detectChanges();
+        console.log('Photos change detection triggered, photos count:', this.photos.length);
       },
       error: (err) => {
         console.error('Error loading photos:', err);
         // Don't set error for photos - category can exist without photos
+        this.cdr.detectChanges();
       }
     });
   }

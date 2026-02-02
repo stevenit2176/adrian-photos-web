@@ -23,7 +23,8 @@ export const routes: Routes = [
       { path: '', loadComponent: () => import('./admin/dashboard/dashboard.component').then(m => m.AdminDashboardComponent) },
       { path: 'photos', loadComponent: () => import('./admin/photos/photo-list/photo-list.component').then(m => m.PhotoListComponent) },
       { path: 'photos/upload', loadComponent: () => import('./admin/photos/photo-upload/photo-upload.component').then(m => m.PhotoUploadComponent) },
-      { path: 'categories', loadComponent: () => import('./admin/dashboard/dashboard.component').then(m => m.AdminDashboardComponent) }, // TODO: Create CategoryListComponent
+      { path: 'photos/edit/:id', loadComponent: () => import('./admin/photos/photo-edit/photo-edit.component').then(m => m.PhotoEditComponent) },
+      { path: 'categories', loadComponent: () => import('./admin/categories/category-list.component').then(m => m.CategoryListComponent) },
       { path: 'orders', loadComponent: () => import('./admin/dashboard/dashboard.component').then(m => m.AdminDashboardComponent) }, // TODO: Create OrderListComponent
       { path: 'products', loadComponent: () => import('./admin/dashboard/dashboard.component').then(m => m.AdminDashboardComponent) }, // TODO: Create ProductListComponent
       { path: 'analytics', loadComponent: () => import('./admin/dashboard/dashboard.component').then(m => m.AdminDashboardComponent) }, // TODO: Create AnalyticsComponent

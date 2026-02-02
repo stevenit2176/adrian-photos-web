@@ -43,6 +43,17 @@ export async function queryOne<T = any>(
 }
 
 /**
+ * Alias for query - execute a query and return all results
+ */
+export async function queryAll<T = any>(
+  db: D1Database,
+  sql: string,
+  params: any[] = []
+): Promise<T[]> {
+  return query<T>(db, sql, params);
+}
+
+/**
  * Execute an insert/update/delete query
  */
 export async function execute(

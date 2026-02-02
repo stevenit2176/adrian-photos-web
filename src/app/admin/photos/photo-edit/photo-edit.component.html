@@ -1,0 +1,162 @@
+<div class="photo-edit-container">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner></mat-spinner>
+    <p>Loading photo...</p>
+  </div>
+
+  <!-- Edit Form -->
+  <div *ngIf="!isLoading && photo" class="edit-content">
+    <mat-card>
+      <mat-card-header>
+        <div class="header-content">
+          <button mat-icon-button (click)="cancel()" class="back-button">
+            <mat-icon>arrow_back</mat-icon>
+          </button>
+          <h1>Edit Photo</h1>
+        </div>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="content-layout">
+          <!-- Photo Preview -->
+          <div class="photo-preview">
+            <div class="current-image" *ngIf="!newImagePreview">
+              <img [src]="getPhotoUrl()" [alt]="photo.title">
+              <p class="photo-info">{{ photo.fileSize | number }} bytes</p>
+              <p class="photo-info">{{ photo.mimeType }}</p>
+            </div>
+
+            <div class="new-image-preview" *ngIf="newImagePreview">
+              <img [src]="newImagePreview" alt="New photo preview">
+              <button mat-icon-button class="remove-button" (click)="removeNewImage()" type="button">
+                <mat-icon>close</mat-icon>
+              </button>
+              <p class="preview-label">New photo selected</p>
+            </div>
+
+            <!-- Upload New Photo Button -->
+            <div class="upload-section">
+              <input
+                type="file"
+                #fileInput
+                accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
+                (change)="onFileSelected($event)"
+                style="display: none">
+              <button 
+                mat-stroked-button 
+                color="primary" 
+                type="button"
+                (click)="fileInput.click()"
+                [disabled]="isUploading">
+                <mat-icon>upload</mat-icon>
+                {{ newImagePreview ? 'Change Photo' : 'Replace Photo' }}
+              </button>
+              <p class="upload-hint">Upload a new photo to replace the current one</p>
+            </div>
+          </div>
+
+          <!-- Edit Form -->
+          <div class="form-section">
+            <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Title</mat-label>
+                <input matInput formControlName="title" placeholder="Enter photo title" required>
+                <mat-error *ngIf="editForm.get('title')?.hasError('required')">
+                  Title is required
+                </mat-error>
+                <mat-error *ngIf="editForm.get('title')?.hasError('maxlength')">
+                  Title must be less than 200 characters
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Description</mat-label>
+                <textarea 
+                  matInput 
+                  formControlName="description" 
+                  placeholder="Enter photo description"
+                  rows="4"
+                  required>
+                </textarea>
+                <mat-error *ngIf="editForm.get('description')?.hasError('required')">
+                  Description is required
+                </mat-error>
+                <mat-error *ngIf="editForm.get('description')?.hasError('maxlength')">
+                  Description must be less than 1000 characters
+                </mat-error>
+              </mat-form-field>
+
+              <div class="form-section">
+                <label class="section-label">Categories *</label>
+                <div *ngIf="categories.length === 0" style="padding: 1rem; color: #999;">
+                  Loading categories...
+                </div>
+                <div *ngIf="categories.length > 0" class="categories-checkboxes">
+                  <mat-checkbox 
+                    *ngFor="let category of categories" 
+                    [checked]="isCategorySelected(category.id)"
+                    (change)="onCategoryChange(category.id, $event.checked)">
+                    {{ category.name }}
+                  </mat-checkbox>
+                </div>
+                <div *ngIf="editForm.get('categoryIds')?.hasError('required') && editForm.get('categoryIds')?.touched" 
+                     class="error-message">
+                  At least one category is required
+                </div>
+              </div>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Price (USD)</mat-label>
+                <input 
+                  matInput 
+                  type="number" 
+                  formControlName="price" 
+                  placeholder="0.00"
+                  step="0.01"
+                  min="0"
+                  required>
+                <span matPrefix>$&nbsp;</span>
+                <mat-error *ngIf="editForm.get('price')?.hasError('required')">
+                  Price is required
+                </mat-error>
+                <mat-error *ngIf="editForm.get('price')?.hasError('min')">
+                  Price must be 0 or greater
+                </mat-error>
+              </mat-form-field>
+
+              <div class="toggle-field">
+                <mat-slide-toggle formControlName="isActive" color="primary">
+                  Active
+                </mat-slide-toggle>
+                <p class="toggle-hint">Inactive photos won't be visible to customers</p>
+              </div>
+
+              <!-- Upload Progress -->
+              <div class="upload-progress" *ngIf="isUploading">
+                <p>Uploading new photo...</p>
+                <mat-progress-bar mode="determinate" [value]="uploadProgress"></mat-progress-bar>
+                <p class="progress-text">{{ uploadProgress }}%</p>
+              </div>
+
+              <div class="form-actions">
+                <button mat-button type="button" (click)="cancel()" [disabled]="isSaving">
+                  Cancel
+                </button>
+                <button 
+                  mat-raised-button 
+                  color="primary" 
+                  type="submit"
+                  [disabled]="editForm.invalid || isSaving">
+                  <mat-spinner diameter="20" *ngIf="isSaving && !isUploading"></mat-spinner>
+                  <span *ngIf="!isSaving">{{ selectedFile ? 'Upload & Save' : 'Save Changes' }}</span>
+                  <span *ngIf="isSaving && !isUploading">Saving...</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

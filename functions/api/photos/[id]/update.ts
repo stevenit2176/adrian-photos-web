@@ -7,12 +7,12 @@
 import { requireAdmin } from '../../../lib/middleware';
 import { Env } from '../../../lib/types';
 import { successResponse, errorResponse, parseJsonBody } from '../../../lib/utils';
-import { execute, queryOne } from '../../../lib/db';
+import { execute, queryOne, queryAll } from '../../../lib/db';
 
 interface UpdatePhotoRequest {
   title?: string;
   description?: string;
-  categoryId?: string;
+  categoryIds?: string[];
   price?: number | null;
   isActive?: boolean;
 }
@@ -50,10 +50,6 @@ export async function onRequestPut(context: any): Promise<Response> {
       updates.push('description = ?');
       sqlParams.push(body.description);
     }
-    if (body.categoryId !== undefined) {
-      updates.push('category_id = ?');
-      sqlParams.push(body.categoryId);
-    }
     if (body.price !== undefined) {
       updates.push('price = ?');
       sqlParams.push(body.price);
@@ -63,33 +59,69 @@ export async function onRequestPut(context: any): Promise<Response> {
       sqlParams.push(body.isActive ? 1 : 0);
     }
 
-    if (updates.length === 0) {
+    if (updates.length === 0 && !body.categoryIds) {
       return errorResponse('No fields to update', 400, 'VALIDATION_ERROR');
     }
 
-    updates.push('updated_at = ?');
-    sqlParams.push(new Date().toISOString());
-    sqlParams.push(photoId);
+    const now = new Date().toISOString();
 
-    await execute(
-      env.DB,
-      `UPDATE photos SET ${updates.join(', ')} WHERE id = ?`,
-      sqlParams
-    );
+    // Update photo metadata if there are changes
+    if (updates.length > 0) {
+      updates.push('updated_at = ?');
+      sqlParams.push(now);
+      sqlParams.push(photoId);
 
-    // Return updated photo
+      await execute(
+        env.DB,
+        `UPDATE photos SET ${updates.join(', ')} WHERE id = ?`,
+        sqlParams
+      );
+    }
+
+    // Update category associations if provided
+    if (body.categoryIds !== undefined) {
+      // Validate that at least one category is provided
+      if (!body.categoryIds || body.categoryIds.length === 0) {
+        return errorResponse('At least one category is required', 400, 'VALIDATION_ERROR');
+      }
+
+      // Delete existing category associations
+      await execute(env.DB, 'DELETE FROM photos_categories WHERE photo_id = ?', [photoId]);
+
+      // Insert new category associations
+      for (const categoryId of body.categoryIds) {
+        await execute(env.DB, `
+          INSERT INTO photos_categories (photo_id, category_id, created_at)
+          VALUES (?, ?, ?)
+        `, [photoId, categoryId, now]);
+      }
+    }
+
+    // Return updated photo with categories
     const updated = await queryOne(env.DB, `
       SELECT 
-        p.id, p.title, p.description, p.category_id, p.r2_key,
+        p.id, p.title, p.description, p.r2_key,
         p.file_size, p.mime_type, p.price, p.is_active,
-        p.uploaded_by, p.created_at, p.updated_at,
-        c.name as category_name
+        p.uploaded_by, p.created_at, p.updated_at
       FROM photos p
-      LEFT JOIN categories c ON p.category_id = c.id
       WHERE p.id = ?
     `, [photoId]);
 
-    return successResponse({ photo: updated });
+    // Get categories for this photo
+    const categories = await queryAll(env.DB, `
+      SELECT c.id, c.name
+      FROM categories c
+      INNER JOIN photos_categories pc ON c.id = pc.category_id
+      WHERE pc.photo_id = ?
+    `, [photoId]);
+
+    return successResponse({ 
+      photo: {
+        ...updated,
+        categoryIds: categories.map((c: any) => c.id),
+        categoryNames: categories.map((c: any) => c.name)
+      } 
+    });
   } catch (error: any) {
     console.error('Update photo error:', error);
     return errorResponse(`Failed to update photo: ${error.message}`, 500, 'SERVER_ERROR');

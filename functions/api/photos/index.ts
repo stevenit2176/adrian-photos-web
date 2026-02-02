@@ -26,12 +26,10 @@ export async function onRequestGet(context: any): Promise<Response> {
     // Build query
     let sql = `
       SELECT 
-        p.id, p.title, p.description, p.category_id, p.r2_key,
+        p.id, p.title, p.description, p.r2_key,
         p.file_size, p.mime_type, p.price, p.is_active,
-        p.uploaded_by, p.created_at, p.updated_at,
-        c.name as category_name, c.slug as category_slug
+        p.uploaded_by, p.created_at, p.updated_at
       FROM photos p
-      LEFT JOIN categories c ON p.category_id = c.id
       WHERE 1=1
     `;
 
@@ -44,7 +42,10 @@ export async function onRequestGet(context: any): Promise<Response> {
 
     // Filter by category
     if (categoryId) {
-      sql += ' AND p.category_id = ?';
+      sql += ` AND EXISTS (
+        SELECT 1 FROM photos_categories pc 
+        WHERE pc.photo_id = p.id AND pc.category_id = ?
+      )`;
       sqlParams.push(categoryId);
     }
 
@@ -59,7 +60,43 @@ export async function onRequestGet(context: any): Promise<Response> {
 
     // Get paginated results
     const photos = await query(env.DB, sql, sqlParams);
-    const paginationResult = paginate(photos, page, limit);
+    
+    // Get categories for each photo
+    const photoIds = photos.map((p: any) => p.id);
+    const categoriesMap = new Map<string, any[]>();
+    
+    if (photoIds.length > 0) {
+      const placeholders = photoIds.map(() => '?').join(',');
+      const categoriesResult = await query(env.DB, `
+        SELECT pc.photo_id, c.id, c.name, c.slug
+        FROM photos_categories pc
+        INNER JOIN categories c ON pc.category_id = c.id
+        WHERE pc.photo_id IN (${placeholders})
+        ORDER BY c.name
+      `, photoIds);
+      
+      for (const cat of categoriesResult) {
+        // Note: query() converts photo_id to photoId via toCamelCase
+        if (!categoriesMap.has(cat.photoId)) {
+          categoriesMap.set(cat.photoId, []);
+        }
+        categoriesMap.get(cat.photoId)!.push({
+          id: cat.id,
+          name: cat.name,
+          slug: cat.slug
+        });
+      }
+    }
+    
+    // Add categories to photos
+    const photosWithCategories = photos.map((photo: any) => ({
+      ...photo,
+      categoryIds: (categoriesMap.get(photo.id) || []).map((c: any) => c.id),
+      categoryNames: (categoriesMap.get(photo.id) || []).map((c: any) => c.name),
+      categorySlugs: (categoriesMap.get(photo.id) || []).map((c: any) => c.slug)
+    }));
+    
+    const paginationResult = paginate(photosWithCategories, page, limit);
 
     return successResponse({
       photos: paginationResult.items,

@@ -114,8 +114,7 @@ export class PhotoListComponent implements OnInit {
   }
 
   editPhoto(photo: Photo): void {
-    // TODO: Navigate to edit page when implemented
-    this.snackBar.open('Edit functionality coming soon', 'Close', { duration: 2000 });
+    this.router.navigate(['/admin/photos/edit', photo.id]);
   }
 
   deletePhoto(photo: Photo): void {

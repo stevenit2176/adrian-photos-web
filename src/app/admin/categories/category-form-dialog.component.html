@@ -1,0 +1,84 @@
+<h2 mat-dialog-title>{{ isEditMode ? 'Edit' : 'Create' }} Category</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form">
+    
+    <!-- Image Upload -->
+    <div class="image-upload-section">
+      <label>Category Image</label>
+      <div class="image-preview-container">
+        <div class="image-preview" *ngIf="imagePreview">
+          <img [src]="imagePreview" alt="Category image preview">
+          <button mat-icon-button type="button" class="remove-image" (click)="removeImage()" *ngIf="!uploadingImage">
+            <mat-icon>close</mat-icon>
+          </button>
+          <div class="uploading-overlay" *ngIf="uploadingImage">
+            <mat-spinner diameter="40"></mat-spinner>
+          </div>
+        </div>
+        <div class="upload-placeholder" *ngIf="!imagePreview">
+          <mat-icon>add_photo_alternate</mat-icon>
+          <p>Click to upload image</p>
+          <input type="file" 
+                 #fileInput
+                 accept="image/*" 
+                 (change)="onFileSelected($event)"
+                 style="display: none;">
+          <button mat-raised-button type="button" (click)="fileInput.click()" [disabled]="uploadingImage">
+            <mat-icon>upload</mat-icon>
+            Choose Image
+          </button>
+        </div>
+      </div>
+      <small>Recommended: 1200x800px, max 10MB (JPEG, PNG, WebP, GIF)</small>
+    </div>
+
+    <!-- Image Alt Text -->
+    <mat-form-field appearance="outline" class="full-width" *ngIf="imagePreview">
+      <mat-label>Image Alt Text</mat-label>
+      <input matInput formControlName="imageAltText" placeholder="Description for accessibility">
+    </mat-form-field>
+
+    <!-- Name -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" placeholder="Category name" required>
+      <mat-error *ngIf="form.get('name')?.hasError('required')">Name is required</mat-error>
+    </mat-form-field>
+
+    <!-- Slug -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Slug</mat-label>
+      <input matInput formControlName="slug" placeholder="category-slug" required>
+      <mat-hint>URL-friendly identifier (auto-generated from name)</mat-hint>
+      <mat-error *ngIf="form.get('slug')?.hasError('required')">Slug is required</mat-error>
+    </mat-form-field>
+
+    <!-- Description -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description" rows="3" placeholder="Category description"></textarea>
+    </mat-form-field>
+
+    <!-- Display Order -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Display Order</mat-label>
+      <input matInput type="number" formControlName="displayOrder" required>
+      <mat-hint>Lower numbers appear first</mat-hint>
+      <mat-error *ngIf="form.get('displayOrder')?.hasError('required')">Display order is required</mat-error>
+      <mat-error *ngIf="form.get('displayOrder')?.hasError('min')">Must be 0 or greater</mat-error>
+    </mat-form-field>
+
+    <!-- Is Active -->
+    <mat-checkbox formControlName="isActive">Active</mat-checkbox>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()" [disabled]="isLoading">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="isLoading || form.invalid || uploadingImage">
+    <mat-spinner diameter="20" *ngIf="isLoading" style="display: inline-block; margin-right: 8px;"></mat-spinner>
+    {{ isEditMode ? 'Update' : 'Create' }}
+  </button>
+</mat-dialog-actions>

@@ -8,9 +8,9 @@ export interface Photo {
   id: string;
   title: string;
   description: string;
-  categoryId: string;
-  categoryName?: string;
-  categorySlug?: string;
+  categoryIds: string[];
+  categoryNames?: string[];
+  categorySlugs?: string[];
   r2Key: string;
   fileSize: number;
   mimeType: string;
@@ -62,10 +62,31 @@ export class PhotoService {
       url += `&categoryId=${categoryId}`;
     }
 
-    return this.http.get<{ success: boolean; data: PhotosResponse }>(url).pipe(
+    return this.http.get<{ success: boolean; data: any }>(url).pipe(
       map(response => {
-        if (response.success) {
-          return response.data;
+        if (response.success && response.data) {
+          // Map snake_case database fields to camelCase
+          const photos = (response.data.photos || []).map((photo: any) => ({
+            id: photo.id,
+            title: photo.title,
+            description: photo.description,
+            categoryIds: photo.categoryIds || [],
+            categoryNames: photo.categoryNames || [],
+            categorySlugs: photo.categorySlugs || [],
+            r2Key: photo.r2_key || photo.r2Key,
+            fileSize: photo.file_size || photo.fileSize,
+            mimeType: photo.mime_type || photo.mimeType,
+            price: photo.price,
+            isActive: photo.is_active !== undefined ? photo.is_active : photo.isActive,
+            uploadedBy: photo.uploaded_by || photo.uploadedBy,
+            createdAt: photo.created_at || photo.createdAt,
+            updatedAt: photo.updated_at || photo.updatedAt
+          }));
+          
+          return {
+            photos,
+            pagination: response.data.pagination || { page: 1, limit: 20, total: 0, totalPages: 0 }
+          };
         }
         throw new Error('Failed to fetch photos');
       })
@@ -73,12 +94,28 @@ export class PhotoService {
   }
 
   getPhotoById(id: string): Observable<Photo> {
-    return this.http.get<{ success: boolean; data: { photo: Photo } }>(
+    return this.http.get<{ success: boolean; data: { photo: any } }>(
       `${environment.apiUrl}/photos/${id}`
     ).pipe(
       map(response => {
-        if (response.success) {
-          return response.data.photo;
+        if (response.success && response.data?.photo) {
+          const photo = response.data.photo;
+          return {
+            id: photo.id,
+            title: photo.title,
+            description: photo.description,
+            categoryIds: photo.categoryIds || [],
+            categoryNames: photo.categoryNames || [],
+            categorySlugs: photo.categorySlugs || [],
+            r2Key: photo.r2_key || photo.r2Key,
+            fileSize: photo.file_size || photo.fileSize,
+            mimeType: photo.mime_type || photo.mimeType,
+            price: photo.price,
+            isActive: photo.is_active !== undefined ? photo.is_active : photo.isActive,
+            uploadedBy: photo.uploaded_by || photo.uploadedBy,
+            createdAt: photo.created_at || photo.createdAt,
+            updatedAt: photo.updated_at || photo.updatedAt
+          };
         }
         throw new Error('Failed to fetch photo');
       })
@@ -94,6 +131,20 @@ export class PhotoService {
           return response.data.productTypes;
         }
         throw new Error('Failed to fetch products');
+      })
+    );
+  }
+
+  updatePhoto(id: string, updates: Partial<Photo>): Observable<Photo> {
+    return this.http.put<{ success: boolean; data: { photo: Photo } }>(
+      `${environment.apiUrl}/photos/${id}`,
+      updates
+    ).pipe(
+      map(response => {
+        if (response.success) {
+          return response.data.photo;
+        }
+        throw new Error('Failed to update photo');
       })
     );
   }

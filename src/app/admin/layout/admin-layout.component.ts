@@ -33,7 +33,7 @@ interface NavItem {
     <mat-sidenav-container class="admin-container">
       <mat-sidenav mode="side" opened class="admin-sidenav">
         <div class="logo-section">
-          <h2>Adrian Photos</h2>
+          <h2>Adrian Photography</h2>
           <span class="admin-badge">Admin</span>
         </div>
         

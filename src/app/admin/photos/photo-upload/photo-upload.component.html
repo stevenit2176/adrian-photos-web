@@ -69,17 +69,20 @@
             </mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Category</mat-label>
-            <mat-select formControlName="categoryId">
-              <mat-option *ngFor="let category of categories" [value]="category.id">
+          <div class="form-section">
+            <label class="section-label">Categories (select at least one) *</label>
+            <div class="categories-checkboxes">
+              <mat-checkbox 
+                *ngFor="let category of categories" 
+                [checked]="isCategorySelected(category.id)"
+                (change)="onCategoryChange(category.id, $event.checked)">
                 {{ category.name }}
-              </mat-option>
-            </mat-select>
-            <mat-error *ngIf="uploadForm.get('categoryId')?.hasError('required')">
-              Category is required
+              </mat-checkbox>
+            </div>
+            <mat-error *ngIf="uploadForm.get('categoryIds')?.hasError('required') && uploadForm.get('categoryIds')?.touched">
+              At least one category is required
             </mat-error>
-          </mat-form-field>
+          </div>
 
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Base Price (cents)</mat-label>

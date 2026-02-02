@@ -44,7 +44,7 @@
           <p class="photo-description">{{ photo.description }}</p>
           <div class="photo-footer">
             <span class="price">${{ (photo.price / 100).toFixed(2) }}</span>
-            <button mat-button color="primary" (click)="$event.preventDefault(); $event.stopPropagation()">
+            <button mat-button color="accent" class="quick-add-btn" (click)="$event.preventDefault(); $event.stopPropagation()">
               <mat-icon>add_shopping_cart</mat-icon>
               Quick Add
             </button>

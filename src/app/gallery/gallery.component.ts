@@ -91,12 +91,14 @@ export class GalleryComponent implements OnInit {
           photoCount: 0 // Will be updated when we have real photos
         }));
         
-        // Use first 4 categories for carousel, or all if less than 4
-        this.carouselPhotos = categories.slice(0, 4).map(cat => ({
+        // Use all categories for carousel
+        this.carouselPhotos = categories.map(cat => ({
           ...cat,
           imageUrl: this.defaultImages[cat.slug]?.carousel || this.defaultCarouselImage,
           photoCount: 0
         }));
+        
+        console.log('Carousel photos loaded:', this.carouselPhotos);
         
         // Start autoplay only after categories are loaded
         if (this.carouselPhotos.length > 0) {

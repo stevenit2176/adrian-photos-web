@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -44,7 +44,8 @@ export class PhotoDetailComponent implements OnInit {
     private router: Router,
     private photoService: PhotoService,
     private cartService: CartService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -63,10 +64,12 @@ export class PhotoDetailComponent implements OnInit {
       next: (photo) => {
         this.photo = photo;
         this.loading = false;
+        this.cdr.detectChanges();
       },
       error: (err) => {
         this.error = 'Failed to load photo';
         this.loading = false;
+        this.cdr.detectChanges();
         console.error('Error loading photo:', err);
       }
     });

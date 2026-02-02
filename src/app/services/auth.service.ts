@@ -44,12 +44,100 @@ export class AuthService {
    */
   private loadUserFromStorage(): void {
     const token = this.getAccessToken();
+    console.log('[AuthService] Loading user from storage, token exists:', !!token);
+    
     if (token) {
-      // Verify token and load user
-      this.getCurrentUser().subscribe({
-        next: (user) => this.currentUserSubject.next(user),
-        error: () => this.clearTokens()
-      });
+      // First check if token is expired by decoding it
+      try {
+        const payload = this.decodeToken(token);
+        const isExpired = payload?.exp && payload.exp < Math.floor(Date.now() / 1000);
+        
+        console.log('[AuthService] Token decoded, expired:', isExpired, 'exp:', payload?.exp, 'now:', Math.floor(Date.now() / 1000));
+        
+        if (isExpired) {
+          console.log('[AuthService] Token expired, attempting refresh...');
+          // Token is expired, try to refresh it
+          const refreshToken = this.getRefreshToken();
+          if (refreshToken) {
+            this.refreshToken().subscribe({
+              next: () => {
+                console.log('[AuthService] Token refreshed successfully, loading user...');
+                // After refresh, load user
+                this.getCurrentUser().subscribe({
+                  next: (user) => {
+                    console.log('[AuthService] User loaded:', user.email);
+                    this.currentUserSubject.next(user);
+                  },
+                  error: (err) => {
+                    console.error('[AuthService] Failed to load user after refresh:', err);
+                    this.clearTokens();
+                  }
+                });
+              },
+              error: (err) => {
+                console.error('[AuthService] Token refresh failed:', err);
+                this.clearTokens();
+              }
+            });
+          } else {
+            console.warn('[AuthService] No refresh token available, clearing tokens');
+            this.clearTokens();
+          }
+        } else {
+          console.log('[AuthService] Token valid, verifying with server...');
+          // Token is valid, verify it with the server
+          this.getCurrentUser().subscribe({
+            next: (user) => {
+              console.log('[AuthService] User verified:', user.email);
+              this.currentUserSubject.next(user);
+            },
+            error: (err) => {
+              console.error('[AuthService] User verification failed:', err);
+              // Only clear tokens if it's an auth error (401/403)
+              // For other errors (network, 500, etc.), keep the tokens
+              if (err.status === 401 || err.status === 403) {
+                console.log('[AuthService] Auth error, attempting token refresh...');
+                // Try to refresh the token first
+                const refreshToken = this.getRefreshToken();
+                if (refreshToken) {
+                  this.refreshToken().subscribe({
+                    next: () => {
+                      console.log('[AuthService] Token refreshed after 401, retrying user load...');
+                      // After refresh, try loading user again
+                      this.getCurrentUser().subscribe({
+                        next: (user) => {
+                          console.log('[AuthService] User loaded after refresh:', user.email);
+                          this.currentUserSubject.next(user);
+                        },
+                        error: (retryErr) => {
+                          console.error('[AuthService] Failed to load user after refresh retry:', retryErr);
+                          this.clearTokens();
+                        }
+                      });
+                    },
+                    error: (refreshErr) => {
+                      console.error('[AuthService] Token refresh failed after 401:', refreshErr);
+                      this.clearTokens();
+                    }
+                  });
+                } else {
+                  console.warn('[AuthService] No refresh token for 401 error, clearing tokens');
+                  this.clearTokens();
+                }
+              } else {
+                // For other errors, keep tokens and just log the error
+                console.warn('[AuthService] Non-auth error, keeping tokens. Error:', err);
+              }
+            }
+          });
+        }
+      } catch (e) {
+        // If token decode fails, it's invalid - clear it
+        console.error('[AuthService] Invalid token format, clearing:', e);
+        this.clearTokens();
+      }
+    } else {
+      console.log('[AuthService] No token found in storage');
     }
   }
 
@@ -211,6 +299,7 @@ export class AuthService {
    * Clear all tokens from storage
    */
   private clearTokens(): void {
+    console.log('[AuthService] Clearing all tokens from storage');
     localStorage.removeItem(this.ACCESS_TOKEN_KEY);
     localStorage.removeItem(this.REFRESH_TOKEN_KEY);
   }
@@ -226,7 +315,40 @@ export class AuthService {
    * Check if current user is admin
    */
   isAdminSync(): boolean {
-    return this.currentUserSubject.value?.role === 'admin';
+    // First check the current user subject
+    if (this.currentUserSubject.value) {
+      return this.currentUserSubject.value.role === 'admin';
+    }
+    
+    // If user not loaded yet, try to decode token
+    const token = this.getAccessToken();
+    if (token) {
+      try {
+        const payload = this.decodeToken(token);
+        return payload?.role === 'admin';
+      } catch (e) {
+        return false;
+      }
+    }
+    
+    return false;
+  }
+
+  /**
+   * Decode JWT token to get payload
+   */
+  private decodeToken(token: string): any {
+    try {
+      const parts = token.split('.');
+      if (parts.length !== 3) {
+        return null;
+      }
+      const payload = parts[1];
+      const decoded = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
+      return JSON.parse(decoded);
+    } catch (e) {
+      return null;
+    }
   }
 
   /**

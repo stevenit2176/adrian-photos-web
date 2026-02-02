@@ -53,7 +53,6 @@
     h1 {
       margin: 0 0 1rem 0;
       font-size: 2.5rem;
-      font-weight: 700;
       color: #333;
 
       @media (max-width: 768px) {
@@ -161,7 +160,6 @@
     h3 {
       margin: 0 0 0.5rem 0;
       font-size: 1.25rem;
-      font-weight: 600;
       color: #333;
     }
 
@@ -195,6 +193,10 @@
         mat-icon {
           margin-right: 0.25rem;
         }
+      }
+
+      .quick-add-btn {
+        color: #e2bf55;
       }
     }
   }

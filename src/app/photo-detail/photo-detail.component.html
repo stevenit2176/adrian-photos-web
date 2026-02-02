@@ -21,7 +21,11 @@
         <mat-card class="info-card">
           <mat-card-header>
             <mat-card-title>{{ photo.title }}</mat-card-title>
-            <mat-card-subtitle>{{ photo.categoryName }}</mat-card-subtitle>
+            <mat-card-subtitle>
+              <span *ngFor="let name of photo.categoryNames; let last = last">
+                {{ name }}<span *ngIf="!last">, </span>
+              </span>
+            </mat-card-subtitle>
           </mat-card-header>
 
           <mat-card-content>

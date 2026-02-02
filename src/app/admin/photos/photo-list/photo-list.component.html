@@ -68,9 +68,13 @@
 
           <!-- Category Column -->
           <ng-container matColumnDef="category">
-            <th mat-header-cell *matHeaderCellDef>Category</th>
+            <th mat-header-cell *matHeaderCellDef>Categories</th>
             <td mat-cell *matCellDef="let photo">
-              <mat-chip>{{ getCategoryName(photo.categoryId) }}</mat-chip>
+              <div class="category-chips">
+                <mat-chip *ngFor="let categoryName of photo.categoryNames">
+                  {{ categoryName }}
+                </mat-chip>
+              </div>
             </td>
           </ng-container>
 

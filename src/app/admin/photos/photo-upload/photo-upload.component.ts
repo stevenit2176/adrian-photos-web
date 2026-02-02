@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormArray, FormControl } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { HttpClient, HttpEventType } from '@angular/common/http';
@@ -27,6 +28,7 @@ import { environment } from '../../../../environments/environment';
     MatSelectModule,
     MatButtonModule,
     MatIconModule,
+    MatCheckboxModule,
     MatProgressBarModule,
     MatSnackBarModule
   ],
@@ -52,7 +54,7 @@ export class PhotoUploadComponent implements OnInit {
     this.uploadForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(3)]],
       description: ['', [Validators.required, Validators.minLength(10)]],
-      categoryId: ['', Validators.required],
+      categoryIds: this.fb.array([], Validators.required),
       price: [0, [Validators.min(0)]]
     });
   }
@@ -71,6 +73,23 @@ export class PhotoUploadComponent implements OnInit {
         console.error('Error loading categories:', err);
       }
     });
+  }
+
+  get categoryIdsArray(): FormArray {
+    return this.uploadForm.get('categoryIds') as FormArray;
+  }
+
+  onCategoryChange(categoryId: string, checked: boolean): void {
+    if (checked) {
+      this.categoryIdsArray.push(new FormControl(categoryId));
+    } else {
+      const index = this.categoryIdsArray.controls.findIndex(x => x.value === categoryId);
+      this.categoryIdsArray.removeAt(index);
+    }
+  }
+
+  isCategorySelected(categoryId: string): boolean {
+    return this.categoryIdsArray.value.includes(categoryId);
   }
 
   onDragOver(event: DragEvent): void {
@@ -149,7 +168,7 @@ export class PhotoUploadComponent implements OnInit {
     formData.append('file', this.selectedFile);
     formData.append('title', this.uploadForm.value.title);
     formData.append('description', this.uploadForm.value.description);
-    formData.append('categoryId', this.uploadForm.value.categoryId);
+    formData.append('categoryIds', JSON.stringify(this.uploadForm.value.categoryIds));
     formData.append('price', this.uploadForm.value.price.toString());
 
     this.http.post(`${environment.apiUrl}/photos/upload`, formData, {
@@ -180,6 +199,7 @@ export class PhotoUploadComponent implements OnInit {
 
   resetForm(): void {
     this.uploadForm.reset({ price: 0 });
+    this.categoryIdsArray.clear();
     this.selectedFile = null;
     this.imagePreview = null;
     this.isUploading = false;
