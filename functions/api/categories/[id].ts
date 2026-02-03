@@ -9,22 +9,23 @@ import { successResponse, errorResponse } from '../../lib/utils';
 export async function onRequestGet(context: any): Promise<Response> {
   try {
     const { env, params } = context;
-    const categoryId = params.id;
+    const idOrSlug = params.id;
 
-    console.log('Category ID requested:', categoryId);
+    console.log('Category ID/Slug requested:', idOrSlug);
 
-    if (!categoryId) {
-      return errorResponse('Category ID is required', 400, 'VALIDATION_ERROR');
+    if (!idOrSlug) {
+      return errorResponse('Category ID or slug is required', 400, 'VALIDATION_ERROR');
     }
 
-    // Get category by ID
+    // Get category by ID or slug
     const result = await env.DB.prepare(
       `SELECT id, name, slug, description, display_order as displayOrder, 
-              is_active as isActive, created_at as createdAt, updated_at as updatedAt
+              is_active as isActive, image_r2_key as imageR2Key, image_alt_text as imageAltText,
+              created_at as createdAt, updated_at as updatedAt
        FROM categories 
-       WHERE id = ? AND is_active = 1`
+       WHERE (id = ? OR slug = ?) AND is_active = 1`
     )
-      .bind(categoryId)
+      .bind(idOrSlug, idOrSlug)
       .first();
 
     console.log('Category result:', result);

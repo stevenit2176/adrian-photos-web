@@ -136,7 +136,7 @@ export class CategoryFormDialogComponent implements OnInit {
     }
 
     this.isLoading = true;
-    const categoryData = this.form.value;
+    const categoryData = this.form.getRawValue();
 
     const request = this.isEditMode
       ? this.categoryService.updateCategory(this.data.category!.id, categoryData)

@@ -46,11 +46,11 @@ export async function onRequestPost(context: any): Promise<Response> {
     const timestamp = Date.now();
     const randomStr = Math.random().toString(36).substring(2, 15);
     const extension = file.name.split('.').pop() || 'jpg';
-    const r2Key = `categories/${user.id}/${timestamp}-${randomStr}.${extension}`;
+    const r2Key = `categories/${user.userId}/${timestamp}-${randomStr}.${extension}`;
 
     // Upload to R2
     const arrayBuffer = await file.arrayBuffer();
-    await env.R2_BUCKET.put(r2Key, arrayBuffer, {
+    await env.R2.put(r2Key, arrayBuffer, {
       httpMetadata: {
         contentType: file.type,
       },

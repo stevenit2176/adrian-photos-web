@@ -42,7 +42,7 @@ export async function onRequestDelete(context: any): Promise<Response> {
     // Delete category image from R2 if exists
     if (category.imageR2Key) {
       try {
-        await env.R2_BUCKET.delete(category.imageR2Key);
+        await env.R2.delete(category.imageR2Key);
       } catch (error) {
         console.error('Error deleting category image from R2:', error);
         // Continue with deletion even if R2 delete fails

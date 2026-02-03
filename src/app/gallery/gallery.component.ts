@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -26,7 +26,7 @@ interface CategoryDisplay extends Category {
   templateUrl: './gallery.component.html',
   styleUrls: ['./gallery.component.scss']
 })
-export class GalleryComponent implements OnInit {
+export class GalleryComponent implements OnInit, OnDestroy {
   currentSlide = 0;
   autoPlayInterval: any;
   selectedCategory: string | null = null;
@@ -70,7 +70,8 @@ export class GalleryComponent implements OnInit {
   
   constructor(
     private categoryService: CategoryService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -100,8 +101,12 @@ export class GalleryComponent implements OnInit {
         
         console.log('Carousel photos loaded:', this.carouselPhotos);
         
+        // Trigger change detection to ensure view updates
+        this.cdr.detectChanges();
+        
         // Start autoplay only after categories are loaded
         if (this.carouselPhotos.length > 0) {
+          console.log('Starting carousel autoplay...');
           this.startAutoPlay();
         }
       },
@@ -117,10 +122,13 @@ export class GalleryComponent implements OnInit {
 
   nextSlide() {
     this.currentSlide = (this.currentSlide + 1) % this.carouselPhotos.length;
+    console.log('Next slide, currentSlide:', this.currentSlide);
+    this.cdr.detectChanges();
   }
 
   prevSlide() {
     this.currentSlide = (this.currentSlide - 1 + this.carouselPhotos.length) % this.carouselPhotos.length;
+    this.cdr.detectChanges();
   }
 
   goToSlide(index: number) {
@@ -128,22 +136,37 @@ export class GalleryComponent implements OnInit {
   }
 
   startAutoPlay() {
+    console.log('startAutoPlay called');
+    this.stopAutoPlay(); // Clear any existing interval first
     this.autoPlayInterval = setInterval(() => {
+      console.log('Auto-advancing slide');
       this.nextSlide();
-    }, 5000);
+    }, 10000);
   }
 
   stopAutoPlay() {
+    console.log('stopAutoPlay called');
     if (this.autoPlayInterval) {
       clearInterval(this.autoPlayInterval);
+      this.autoPlayInterval = null;
     }
   }
 
   onCarouselMouseEnter() {
+    console.log('Mouse entered carousel');
     this.stopAutoPlay();
   }
 
   onCarouselMouseLeave() {
+    console.log('Mouse left carousel');
     this.startAutoPlay();
+  }
+
+  navigateToCurrentCategory() {
+    const category = this.carouselPhotos[this.currentSlide];
+    if (category) {
+      console.log('Navigating to category:', category.name, 'Slug:', category.slug);
+      window.location.href = `/categories/${category.slug}`;
+    }
   }
 }

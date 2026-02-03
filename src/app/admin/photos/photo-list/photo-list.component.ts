@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -51,7 +51,8 @@ export class PhotoListComponent implements OnInit {
     private categoryService: CategoryService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -60,7 +61,9 @@ export class PhotoListComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
+    if (this.paginator) {
+      this.dataSource.paginator = this.paginator;
+    }
   }
 
   loadCategories(): void {
@@ -82,6 +85,7 @@ export class PhotoListComponent implements OnInit {
       next: (response) => {
         this.dataSource.data = response.photos;
         this.isLoading = false;
+        this.cdr.detectChanges();
       },
       error: (err) => {
         this.snackBar.open('Failed to load photos', 'Close', { duration: 3000 });

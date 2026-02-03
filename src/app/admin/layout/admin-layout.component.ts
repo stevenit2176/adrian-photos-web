@@ -33,7 +33,7 @@ interface NavItem {
     <mat-sidenav-container class="admin-container">
       <mat-sidenav mode="side" opened class="admin-sidenav">
         <div class="logo-section">
-          <h2>Adrian Photography</h2>
+          <h2>Dashboard</h2>
           <span class="admin-badge">Admin</span>
         </div>
         
@@ -121,31 +121,28 @@ interface NavItem {
       padding-top: 16px;
       
       a {
-        color: rgba(255, 255, 255, 0.8);
         font-family: 'Barlow', sans-serif;
         font-weight: 600;
         transition: all 0.3s ease;
         
         &:hover {
           background: rgba(255, 255, 255, 0.05);
-          color: #e2bf55;
           
-          mat-icon {
+          mat-icon, span {
             color: #e2bf55;
           }
         }
         
         &.active {
           background: rgba(226, 191, 85, 0.15);
-          color: #e2bf55;
           border-left: 4px solid #e2bf55;
           
-          mat-icon {
+          mat-icon, span {
             color: #e2bf55;
           }
         }
         
-        mat-icon {
+        mat-icon, span {
           color: rgba(255, 255, 255, 0.8);
           transition: all 0.3s ease;
         }

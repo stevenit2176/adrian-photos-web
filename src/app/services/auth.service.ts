@@ -86,17 +86,25 @@ export class AuthService {
         } else {
           console.log('[AuthService] Token valid, verifying with server...');
           // Token is valid, verify it with the server
-          this.getCurrentUser().subscribe({
-            next: (user) => {
-              console.log('[AuthService] User verified:', user.email);
-              this.currentUserSubject.next(user);
-            },
-            error: (err) => {
-              console.error('[AuthService] User verification failed:', err);
-              // Only clear tokens if it's an auth error (401/403)
-              // For other errors (network, 500, etc.), keep the tokens
-              if (err.status === 401 || err.status === 403) {
-                console.log('[AuthService] Auth error, attempting token refresh...');
+          // Defer the API call slightly to ensure HTTP client is ready
+          setTimeout(() => {
+            this.getCurrentUser().subscribe({
+              next: (user) => {
+                console.log('[AuthService] User verified:', user.email);
+                this.currentUserSubject.next(user);
+              },
+              error: (err) => {
+                // Silently handle initialization errors (NG0200)
+                if (err.message && err.message.includes('NG0200')) {
+                  console.warn('[AuthService] HTTP not ready during init, will verify on first navigation');
+                  return;
+                }
+                
+                console.error('[AuthService] User verification failed:', err);
+                // Only clear tokens if it's an auth error (401/403)
+                // For other errors (network, 500, etc.), keep the tokens
+                if (err.status === 401 || err.status === 403) {
+                  console.log('[AuthService] Auth error, attempting token refresh...');
                 // Try to refresh the token first
                 const refreshToken = this.getRefreshToken();
                 if (refreshToken) {
@@ -126,10 +134,11 @@ export class AuthService {
                 }
               } else {
                 // For other errors, keep tokens and just log the error
-                console.warn('[AuthService] Non-auth error, keeping tokens. Error:', err);
+                console.warn('[AuthService] Non-auth error, keeping tokens.');
               }
             }
           });
+        }, 0);
         }
       } catch (e) {
         // If token decode fails, it's invalid - clear it

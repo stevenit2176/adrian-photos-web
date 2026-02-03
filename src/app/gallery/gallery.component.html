@@ -1,14 +1,11 @@
 <div class="gallery-container">
   <!-- Hero Carousel -->
-  <section class="carousel-section" 
-           (mouseenter)="onCarouselMouseEnter()" 
-           (mouseleave)="onCarouselMouseLeave()">
+  <section class="carousel-section">
     <div class="carousel">
-      <div class="carousel-inner">
+      <div class="carousel-inner" (click)="navigateToCurrentCategory()">
         <div *ngFor="let category of carouselPhotos; let i = index"
              class="carousel-item"
              [class.active]="i === currentSlide"
-             [routerLink]="['/categories', category.id]"
              style="cursor: pointer;">
           <img [src]="category.imageUrl" [alt]="category.name">
           <div class="carousel-caption">
@@ -46,7 +43,7 @@
     <div class="categories-grid">
       <mat-card *ngFor="let category of categories" 
                 class="category-card" 
-                [routerLink]="['/categories', category.id]"
+                [routerLink]="['/categories', category.slug]"
                 style="cursor: pointer;">
         <div class="category-image-wrapper">
           <img mat-card-image [src]="category.imageUrl" [alt]="category.name">

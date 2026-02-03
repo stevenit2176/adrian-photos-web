@@ -43,15 +43,33 @@ export class CategoryComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const categoryId = this.route.snapshot.paramMap.get('id');
-    console.log('Category component initialized with ID:', categoryId);
-    if (categoryId) {
-      this.loadCategory(categoryId);
-      this.loadPhotos(categoryId);
+    const categoryIdOrSlug = this.route.snapshot.paramMap.get('id');
+    console.log('Category component initialized with ID:', categoryIdOrSlug);
+    if (categoryIdOrSlug) {
+      this.loadCategoryByIdOrSlug(categoryIdOrSlug);
     } else {
       this.error = 'Category ID not found';
       this.loading = false;
     }
+  }
+
+  loadCategoryByIdOrSlug(idOrSlug: string): void {
+    console.log('Loading category:', idOrSlug);
+    this.categoryService.getCategoryById(idOrSlug).subscribe({
+      next: (category) => {
+        console.log('Category loaded:', category);
+        this.category = category;
+        this.loading = false;
+        this.cdr.detectChanges();
+        this.loadPhotos(category.id);
+      },
+      error: (err) => {
+        console.error('Failed to load category:', err);
+        this.error = 'Category not found';
+        this.loading = false;
+        this.cdr.detectChanges();
+      }
+    });
   }
 
   loadCategory(id: string): void {

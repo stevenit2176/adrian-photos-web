@@ -14,16 +14,22 @@ export async function onRequestGet(context: any): Promise<Response> {
   try {
     const { request, env } = context;
     
-    // Extract the path after /api/photos/image/
     const url = new URL(request.url);
-    const pathMatch = url.pathname.match(/\/api\/photos\/image\/(.+)/);
     
-    if (!pathMatch || !pathMatch[1]) {
+    // Support both query parameter (?key=...) and path-based (/api/photos/image/key) formats
+    let r2Key = url.searchParams.get('key');
+    
+    if (!r2Key) {
+      // Try path-based format
+      const pathMatch = url.pathname.match(/\/api\/photos\/image\/(.+)/);
+      if (pathMatch && pathMatch[1]) {
+        r2Key = decodeURIComponent(pathMatch[1]);
+      }
+    }
+    
+    if (!r2Key) {
       return errorResponse('Image path is required', 400, 'INVALID_REQUEST');
     }
-
-    // Decode the R2 key
-    const r2Key = decodeURIComponent(pathMatch[1]);
 
     // Get the image from R2
     const object = await getFromR2(env.R2, r2Key);
