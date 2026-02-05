@@ -1,0 +1,193 @@
+<div class="admin-page analytics">
+  <div class="admin-page-header">
+    <div class="header-content">
+      <h1>Analytics</h1>
+      <p class="subtitle">Detailed insights into site traffic, user behavior, and sales performance.</p>
+    </div>
+  </div>
+
+  <!-- Analytics Stats Cards -->
+  <div class="stats-grid">
+    <!-- Visitors Card -->
+    <mat-card class="stat-card visitors">
+      <mat-card-content>
+        <div class="stat-icon">
+          <mat-icon>people</mat-icon>
+        </div>
+        <div class="stat-info">
+          <div class="stat-label">Total Visitors</div>
+          @if (loadingAnalytics) {
+            <mat-spinner diameter="30"></mat-spinner>
+          } @else {
+            <div class="stat-value">{{ analyticsStats?.totalVisitors?.toLocaleString() || '0' }}</div>
+            <div class="stat-change neutral">All time</div>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Visitors This Week Card -->
+    <mat-card class="stat-card visitors-week">
+      <mat-card-content>
+        <div class="stat-icon">
+          <mat-icon>trending_up</mat-icon>
+        </div>
+        <div class="stat-info">
+          <div class="stat-label">Visitors This Week</div>
+          @if (loadingAnalytics) {
+            <mat-spinner diameter="30"></mat-spinner>
+          } @else {
+            <div class="stat-value">{{ analyticsStats?.visitorsThisWeek?.toLocaleString() || '0' }}</div>
+            <div class="stat-change positive">Active engagement</div>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Visitors Today Card -->
+    <mat-card class="stat-card visitors-today">
+      <mat-card-content>
+        <div class="stat-icon">
+          <mat-icon>today</mat-icon>
+        </div>
+        <div class="stat-info">
+          <div class="stat-label">Visitors Today</div>
+          @if (loadingAnalytics) {
+            <mat-spinner diameter="30"></mat-spinner>
+          } @else {
+            <div class="stat-value">{{ analyticsStats?.visitorsToday?.toLocaleString() || '0' }}</div>
+            <div class="stat-change positive">Today</div>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Page Views Card -->
+    <mat-card class="stat-card pageviews">
+      <mat-card-content>
+        <div class="stat-icon">
+          <mat-icon>visibility</mat-icon>
+        </div>
+        <div class="stat-info">
+          <div class="stat-label">Page Views</div>
+          @if (loadingAnalytics) {
+            <mat-spinner diameter="30"></mat-spinner>
+          } @else {
+            <div class="stat-value">{{ analyticsStats?.pageViews?.toLocaleString() || '0' }}</div>
+            <div class="stat-change neutral">Total views</div>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Avg Session Duration Card -->
+    <mat-card class="stat-card session-duration">
+      <mat-card-content>
+        <div class="stat-icon">
+          <mat-icon>access_time</mat-icon>
+        </div>
+        <div class="stat-info">
+          <div class="stat-label">Avg. Session Duration</div>
+          @if (loadingAnalytics) {
+            <mat-spinner diameter="30"></mat-spinner>
+          } @else {
+            <div class="stat-value">{{ formatDuration(analyticsStats?.avgSessionDuration || 0) }}</div>
+            <div class="stat-change neutral">Per session</div>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Visitors This Month Card -->
+    <mat-card class="stat-card visitors-month">
+      <mat-card-content>
+        <div class="stat-icon">
+          <mat-icon>calendar_month</mat-icon>
+        </div>
+        <div class="stat-info">
+          <div class="stat-label">Visitors This Month</div>
+          @if (loadingAnalytics) {
+            <mat-spinner diameter="30"></mat-spinner>
+          } @else {
+            <div class="stat-value">{{ analyticsStats?.visitorsThisMonth?.toLocaleString() || '0' }}</div>
+            <div class="stat-change positive">This month</div>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Top Pages Section -->
+  @if (!loadingAnalytics && analyticsStats) {
+    <mat-card class="top-pages-card">
+      <mat-card-header>
+        <mat-card-title>Top Pages</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="page-list">
+          @for (page of analyticsStats.topPages; track page.path) {
+            <div class="page-item">
+              <span class="page-path">{{ page.path }}</span>
+              <span class="page-views">{{ page.views.toLocaleString() }} views</span>
+            </div>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
+
+  <!-- Analytics Setup Notice -->
+  <mat-card class="analytics-notice">
+    <mat-card-content>
+      <div class="notice-content">
+        <mat-icon class="notice-icon">info</mat-icon>
+        <div class="notice-text">
+          <h3>Google Analytics Tracking Active</h3>
+          <p>
+            <strong>Current Status:</strong> Using Google Analytics 4 Measurement Protocol to track user behavior in real-time.
+          </p>
+          <p>
+            <strong>Tracked Events:</strong> Page views, Add to cart, Purchases (when implemented)
+          </p>
+          <p class="setup-note">
+            📊 <strong>Note:</strong> The analytics shown above are currently <strong>mock data</strong> for development purposes. 
+            To view real Google Analytics data, you'll need to configure the Google Analytics Data API with service account credentials.
+          </p>
+          <div class="setup-steps">
+            <h4>To enable real-time analytics data:</h4>
+            <ol>
+              <li>
+                <strong>Get a Measurement Protocol API Secret:</strong>
+                <ul>
+                  <li>Go to <a href="https://analytics.google.com" target="_blank">Google Analytics</a></li>
+                  <li>Navigate to Admin → Data Streams → Select your web stream</li>
+                  <li>Click "Measurement Protocol API secrets"</li>
+                  <li>Create a new API secret and copy it</li>
+                </ul>
+              </li>
+              <li>
+                <strong>Update Environment:</strong>
+                Set <code>ga4ApiSecret</code> in <code>src/environments/environment.prod.ts</code>
+              </li>
+              <li>
+                <strong>Optional - For Dashboard Data Retrieval:</strong>
+                <ul>
+                  <li>Create a Google Cloud Service Account with Analytics Read permissions</li>
+                  <li>Download the JSON credentials</li>
+                  <li>Set <code>GA4_SERVICE_ACCOUNT_KEY</code> in Cloudflare Pages environment variables</li>
+                  <li>Implement REST API calls to Google Analytics Data API in <code>functions/api/analytics/stats.ts</code></li>
+                </ul>
+              </li>
+            </ol>
+          </div>
+          <p class="current-config">
+            <strong>Current Configuration:</strong><br>
+            Measurement ID: <code>{{ measurementId }}</code><br>
+            Property ID: <code>{{ propertyId }}</code><br>
+            API Secret: <span class="status-badge" [class.configured]="apiSecretConfigured">{{ apiSecretConfigured ? 'Configured ✓' : 'Not Configured' }}</span>
+          </p>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

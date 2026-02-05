@@ -20,15 +20,20 @@ export const routes: Routes = [
     loadComponent: () => import('./admin/layout/admin-layout.component').then(m => m.AdminLayoutComponent),
     canActivate: [adminGuard],
     children: [
-      { path: '', loadComponent: () => import('./admin/dashboard/dashboard.component').then(m => m.AdminDashboardComponent) },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { 
+        path: 'dashboard', 
+        loadComponent: () => import('./admin/dashboard/dashboard.component').then(m => m.AdminDashboardComponent),
+        runGuardsAndResolvers: 'always'
+      },
       { path: 'photos', loadComponent: () => import('./admin/photos/photo-list/photo-list.component').then(m => m.PhotoListComponent) },
       { path: 'photos/upload', loadComponent: () => import('./admin/photos/photo-upload/photo-upload.component').then(m => m.PhotoUploadComponent) },
       { path: 'photos/edit/:id', loadComponent: () => import('./admin/photos/photo-edit/photo-edit.component').then(m => m.PhotoEditComponent) },
       { path: 'categories', loadComponent: () => import('./admin/categories/category-list.component').then(m => m.CategoryListComponent) },
-      { path: 'orders', loadComponent: () => import('./admin/dashboard/dashboard.component').then(m => m.AdminDashboardComponent) }, // TODO: Create OrderListComponent
-      { path: 'products', loadComponent: () => import('./admin/dashboard/dashboard.component').then(m => m.AdminDashboardComponent) }, // TODO: Create ProductListComponent
-      { path: 'analytics', loadComponent: () => import('./admin/dashboard/dashboard.component').then(m => m.AdminDashboardComponent) }, // TODO: Create AnalyticsComponent
-      { path: 'settings', loadComponent: () => import('./admin/dashboard/dashboard.component').then(m => m.AdminDashboardComponent) } // TODO: Create SettingsComponent
+      { path: 'orders', loadComponent: () => import('./admin/orders/orders.component').then(m => m.AdminOrdersComponent) },
+      { path: 'products', loadComponent: () => import('./admin/products/products.component').then(m => m.AdminProductsComponent) },
+      { path: 'analytics', loadComponent: () => import('./admin/analytics/analytics.component').then(m => m.AdminAnalyticsComponent) },
+      { path: 'settings', loadComponent: () => import('./admin/settings/settings.component').then(m => m.AdminSettingsComponent) }
     ]
   }
 ];

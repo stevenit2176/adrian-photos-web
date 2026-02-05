@@ -1,6 +1,6 @@
 /**
  * GET /api/categories
- * Get all active categories
+ * Get categories (active only by default, include inactive with ?includeInactive=true)
  */
 
 import { Env } from '../../lib/types';
@@ -9,10 +9,14 @@ import { getCategories } from '../../lib/db';
 
 export async function onRequestGet(context: any): Promise<Response> {
   try {
-    const { env } = context;
+    const { env, request } = context;
+    
+    // Check for includeInactive query parameter
+    const url = new URL(request.url);
+    const includeInactive = url.searchParams.get('includeInactive') === 'true';
 
-    // Get all active categories
-    const categories = await getCategories(env.DB, false);
+    // Get categories based on includeInactive parameter
+    const categories = await getCategories(env.DB, includeInactive);
 
     return successResponse({
       categories,

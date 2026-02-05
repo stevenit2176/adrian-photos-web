@@ -1,0 +1,204 @@
+<div class="frame-configurator">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Frame This Photo</mat-card-title>
+      <mat-card-subtitle>Choose your custom frame options</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div *ngIf="showSpinner" class="loading-container">
+        <mat-spinner diameter="50"></mat-spinner>
+        <p>Loading frame options...</p>
+      </div>
+
+      <div *ngIf="error" class="error-message">
+        {{ error }}
+      </div>
+
+      <div *ngIf="!loading && frameItems" class="config-form">
+        <!-- Frame Style -->
+        <mat-expansion-panel expanded>
+          <mat-expansion-panel-header>
+            <mat-panel-title>Frame Style</mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Profile</mat-label>
+            <mat-select [(ngModel)]="selectedProfile" (selectionChange)="onProfileChange()">
+              <mat-option *ngFor="let profile of availableProfiles" [value]="profile">
+                {{ profile }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Color</mat-label>
+            <mat-select [(ngModel)]="selectedColor" (selectionChange)="calculatePrice()">
+              <mat-option *ngFor="let color of availableColors" [value]="color">
+                {{ color }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-expansion-panel>
+
+        <!-- Size -->
+        <mat-expansion-panel expanded>
+          <mat-expansion-panel-header>
+            <mat-panel-title>Size (inches)</mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <div class="size-inputs">
+            <mat-form-field appearance="outline">
+              <mat-label>Width</mat-label>
+              <input matInput type="number" [(ngModel)]="frameWidth" 
+                     (ngModelChange)="calculatePrice()" min="4" max="62" step="0.125">
+            </mat-form-field>
+
+            <span class="size-separator">×</span>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Height</mat-label>
+              <input matInput type="number" [(ngModel)]="frameHeight" 
+                     (ngModelChange)="calculatePrice()" min="4" max="62" step="0.125">
+            </mat-form-field>
+          </div>
+        </mat-expansion-panel>
+
+        <!-- Cover & Backing -->
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>Cover & Backing</mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Cover</mat-label>
+            <mat-select [(ngModel)]="selectedCover" (selectionChange)="calculatePrice()">
+              <mat-option *ngFor="let cover of frameItems.covers" [value]="cover.cover_name">
+                {{ cover.cover_name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Backing</mat-label>
+            <mat-select [(ngModel)]="selectedBacking" (selectionChange)="calculatePrice()">
+              <mat-option *ngFor="let backing of frameItems.backings" [value]="backing.backing_name">
+                {{ backing.backing_name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-expansion-panel>
+
+        <!-- Matting -->
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>Matting (Optional)</mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <!-- Outer Mat -->
+          <div class="mat-option">
+            <label>
+              <input type="checkbox" [(ngModel)]="useOuterMat" (ngModelChange)="calculatePrice()">
+              Add Outer Mat
+            </label>
+
+            <div *ngIf="useOuterMat" class="mat-config">
+              <mat-form-field appearance="outline">
+                <mat-label>Mat Type</mat-label>
+                <mat-select [(ngModel)]="outerMatType" (selectionChange)="calculatePrice()">
+                  <mat-option *ngFor="let type of getMatTypes()" [value]="type">
+                    {{ type }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Mat Color</mat-label>
+                <mat-select [(ngModel)]="outerMatColor" (selectionChange)="calculatePrice()">
+                  <mat-option *ngFor="let color of getMatColors(outerMatType)" [value]="color">
+                    {{ color }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Mat Width (inches)</mat-label>
+                <input matInput type="number" [(ngModel)]="outerMatThickness" 
+                       (ngModelChange)="calculatePrice()" min="0.5" max="4" step="0.25">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <!-- Inner Mat -->
+          <div class="mat-option">
+            <label>
+              <input type="checkbox" [(ngModel)]="useInnerMat" (ngModelChange)="calculatePrice()">
+              Add Inner Mat (Double Mat)
+            </label>
+
+            <div *ngIf="useInnerMat" class="mat-config">
+              <mat-form-field appearance="outline">
+                <mat-label>Mat Type</mat-label>
+                <mat-select [(ngModel)]="innerMatType" (selectionChange)="calculatePrice()">
+                  <mat-option *ngFor="let type of getMatTypes()" [value]="type">
+                    {{ type }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Mat Color</mat-label>
+                <mat-select [(ngModel)]="innerMatColor" (selectionChange)="calculatePrice()">
+                  <mat-option *ngFor="let color of getMatColors(innerMatType)" [value]="color">
+                    {{ color }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Mat Width (inches)</mat-label>
+                <input matInput type="number" [(ngModel)]="innerMatThickness" 
+                       (ngModelChange)="calculatePrice()" min="0.25" max="2" step="0.25">
+              </mat-form-field>
+            </div>
+          </div>
+        </mat-expansion-panel>
+
+        <!-- Price Summary -->
+        <div class="price-summary" *ngIf="framePrice">
+          <h3>Frame Summary</h3>
+          
+          <div class="summary-details">
+            <div class="detail-row" *ngFor="let item of framePrice.display_attributes | keyvalue">
+              <span class="label">{{ item.key }}:</span>
+              <span class="value">{{ item.value }}</span>
+            </div>
+          </div>
+
+          <div class="price-total">
+            <span class="label">Frame Price:</span>
+            <span class="amount">${{ framePrice.price }}</span>
+          </div>
+
+          <div class="shipping-estimate" *ngIf="framePrice.shipping_estimate">
+            <span class="label">Estimated Shipping:</span>
+            <span class="amount">${{ framePrice.shipping_estimate.price }}</span>
+          </div>
+
+          <div class="calculating" *ngIf="calculating">
+            <mat-spinner diameter="30"></mat-spinner>
+            <span>Calculating price...</span>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-raised-button color="primary" 
+              [disabled]="!framePrice || calculating" 
+              (click)="onAddToCart()">
+        Add Framed Photo to Cart
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

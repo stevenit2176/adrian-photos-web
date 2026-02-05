@@ -19,6 +19,12 @@ JWT_SECRET = "dev-secret-key-change-in-production-min-32-chars-required"
 JWT_ACCESS_EXPIRY = "1h"
 JWT_REFRESH_EXPIRY = "7d"
 ENVIRONMENT = "development"
+FRAMEITEASY_API_URL = "https://api.sandbox.frameiteasy.com"
+FRAMEITEASY_API_KEY = "sandbox@frameiteasy.com:0Az9*MtXQo"
+
+# Google Analytics 4
+GA4_PROPERTY_ID = "523127739"
+GA4_MEASUREMENT_ID = "G-9QKHWCWXTH"
 
 # Production environment
 [env.production]
@@ -36,9 +42,12 @@ bucket_name = "adrian-photos"
 JWT_ACCESS_EXPIRY = "1h"
 JWT_REFRESH_EXPIRY = "7d"
 ENVIRONMENT = "production"
+FRAMEITEASY_API_URL = "https://api.frameiteasy.com"
 
-# Secrets for production (set via Cloudflare Dashboard):
+# Secrets for production (set via Cloudflare Dashboard or CLI):
 # JWT_SECRET = "35d4b8cd-8e2e-4491-8412-e30e59d1944e" (set as encrypted environment variable)
+# FRAMEITEASY_API_KEY (your production Frame It Easy API key)
+# GA4_SERVICE_ACCOUNT_KEY (Google Analytics service account JSON - set as secret)
 # STRIPE_SECRET_KEY (when needed)
 # STRIPE_WEBHOOK_SECRET (when needed)
 # BAYPHOTO_API_KEY (when needed)

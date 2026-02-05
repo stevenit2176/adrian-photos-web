@@ -1,0 +1,237 @@
+{
+  "routes": [
+    {
+      "routePath": "/api/fulfillment/orders/:id",
+      "mountPath": "/api/fulfillment/orders",
+      "method": "GET",
+      "module": [
+        "api/fulfillment/orders/[id].ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/categories/:id/delete",
+      "mountPath": "/api/categories/:id",
+      "method": "DELETE",
+      "module": [
+        "api/categories/[id]/delete.ts:onRequestDelete"
+      ]
+    },
+    {
+      "routePath": "/api/categories/:id/update",
+      "mountPath": "/api/categories/:id",
+      "method": "PUT",
+      "module": [
+        "api/categories/[id]/update.ts:onRequestPut"
+      ]
+    },
+    {
+      "routePath": "/api/photos/:id/delete",
+      "mountPath": "/api/photos/:id",
+      "method": "DELETE",
+      "module": [
+        "api/photos/[id]/delete.ts:onRequestDelete"
+      ]
+    },
+    {
+      "routePath": "/api/photos/:id/update",
+      "mountPath": "/api/photos/:id",
+      "method": "PUT",
+      "module": [
+        "api/photos/[id]/update.ts:onRequestPut"
+      ]
+    },
+    {
+      "routePath": "/api/analytics/stats",
+      "mountPath": "/api/analytics",
+      "method": "GET",
+      "module": [
+        "api/analytics/stats.ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/analytics/stats",
+      "mountPath": "/api/analytics",
+      "method": "OPTIONS",
+      "module": [
+        "api/analytics/stats.ts:onRequestOptions"
+      ]
+    },
+    {
+      "routePath": "/api/auth/login",
+      "mountPath": "/api/auth",
+      "method": "POST",
+      "module": [
+        "api/auth/login.ts:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/api/auth/logout",
+      "mountPath": "/api/auth",
+      "method": "POST",
+      "module": [
+        "api/auth/logout.ts:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/api/auth/me",
+      "mountPath": "/api/auth",
+      "method": "GET",
+      "module": [
+        "api/auth/me.ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/auth/refresh",
+      "mountPath": "/api/auth",
+      "method": "POST",
+      "module": [
+        "api/auth/refresh.ts:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/api/auth/register",
+      "mountPath": "/api/auth",
+      "method": "POST",
+      "module": [
+        "api/auth/register.ts:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/api/cart/calculate",
+      "mountPath": "/api/cart",
+      "method": "POST",
+      "module": [
+        "api/cart/calculate.ts:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/api/categories/create",
+      "mountPath": "/api/categories",
+      "method": "POST",
+      "module": [
+        "api/categories/create.ts:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/api/categories/upload-image",
+      "mountPath": "/api/categories",
+      "method": "POST",
+      "module": [
+        "api/categories/upload-image.ts:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/api/fulfillment/calculate",
+      "mountPath": "/api/fulfillment",
+      "method": "POST",
+      "module": [
+        "api/fulfillment/calculate.ts:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/api/fulfillment/items",
+      "mountPath": "/api/fulfillment",
+      "method": "GET",
+      "module": [
+        "api/fulfillment/items.ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/fulfillment/orders",
+      "mountPath": "/api/fulfillment",
+      "method": "GET",
+      "module": [
+        "api/fulfillment/orders.ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/fulfillment/orders",
+      "mountPath": "/api/fulfillment",
+      "method": "POST",
+      "module": [
+        "api/fulfillment/orders.ts:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/api/photos/image",
+      "mountPath": "/api/photos",
+      "method": "GET",
+      "module": [
+        "api/photos/image.ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/photos/upload",
+      "mountPath": "/api/photos",
+      "method": "POST",
+      "module": [
+        "api/photos/upload.ts:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/api/products/pricing",
+      "mountPath": "/api/products",
+      "method": "GET",
+      "module": [
+        "api/products/pricing.ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/categories/:id",
+      "mountPath": "/api/categories",
+      "method": "GET",
+      "module": [
+        "api/categories/[id].ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/photos/:id",
+      "mountPath": "/api/photos",
+      "method": "GET",
+      "module": [
+        "api/photos/[id].ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/photos/:id",
+      "mountPath": "/api/photos",
+      "method": "PUT",
+      "module": [
+        "api/photos/[id].ts:onRequestPut"
+      ]
+    },
+    {
+      "routePath": "/api/categories",
+      "mountPath": "/api/categories",
+      "method": "GET",
+      "module": [
+        "api/categories/index.ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/health",
+      "mountPath": "/api",
+      "method": "GET",
+      "module": [
+        "api/health.ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/photos",
+      "mountPath": "/api/photos",
+      "method": "GET",
+      "module": [
+        "api/photos/index.ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/",
+      "mountPath": "/",
+      "method": "",
+      "middleware": [
+        "_middleware.ts:onRequest"
+      ]
+    }
+  ],
+  "baseURL": "/"
+}

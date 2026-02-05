@@ -9,6 +9,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { AuthService } from './services/auth.service';
 import { CartIconComponent } from './shared/cart-icon/cart-icon.component';
 import { CategoryService, Category } from './services/category.service';
+import { AnalyticsTrackingService } from './services/analytics-tracking.service';
 
 @Component({
   selector: 'app-root',
@@ -26,7 +27,7 @@ import { CategoryService, Category } from './services/category.service';
   ],
   template: `
     <mat-toolbar class="navbar">
-      <a routerLink="/" class="logo">Adrian Photos</a>
+      <a routerLink="/" class="logo">Photography <i>by</i> Adrian</a>
       <span class="spacer"></span>
       <nav>
         <a mat-button routerLink="/gallery">Gallery</a>
@@ -61,7 +62,7 @@ import { CategoryService, Category } from './services/category.service';
               }
             </div>
             @if (user.role === 'admin') {
-              <button mat-menu-item routerLink="/admin">
+              <button mat-menu-item routerLink="/admin/dashboard">
                 <mat-icon>dashboard</mat-icon>
                 Admin Dashboard
               </button>
@@ -175,7 +176,8 @@ export class AppComponent implements OnInit {
 
   constructor(
     public authService: AuthService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private analyticsTracking: AnalyticsTrackingService // Initialize tracking
   ) {}
   
   ngOnInit(): void {

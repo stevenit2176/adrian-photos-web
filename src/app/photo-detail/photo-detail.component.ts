@@ -8,9 +8,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTabsModule } from '@angular/material/tabs';
 import { FormsModule } from '@angular/forms';
 import { PhotoService, Photo, Product, ProductSize } from '../services/photo.service';
 import { CartService } from '../services/cart.service';
+import { FrameConfiguratorComponent } from '../frame-configurator/frame-configurator.component';
+import { AnalyticsTrackingService } from '../services/analytics-tracking.service';
 
 @Component({
   selector: 'app-photo-detail',
@@ -25,7 +28,9 @@ import { CartService } from '../services/cart.service';
     MatSelectModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatTabsModule,
+    FrameConfiguratorComponent
   ],
   templateUrl: './photo-detail.component.html',
   styleUrls: ['./photo-detail.component.scss']
@@ -34,6 +39,7 @@ export class PhotoDetailComponent implements OnInit {
   photo: Photo | null = null;
   products: Product[] = [];
   selectedProduct: Product | null = null;
+  selectedTabIndex = 0; // Start with Custom Framed tab
   selectedSize: ProductSize | null = null;
   quantity = 1;
   loading = true;
@@ -45,7 +51,8 @@ export class PhotoDetailComponent implements OnInit {
     private photoService: PhotoService,
     private cartService: CartService,
     private snackBar: MatSnackBar,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private analytics: AnalyticsTrackingService
   ) {}
 
   ngOnInit(): void {
@@ -143,5 +150,37 @@ export class PhotoDetailComponent implements OnInit {
 
   goBack(): void {
     this.router.navigate(['/gallery']);
+  }
+
+  onFrameAddToCart(event: { photoId: string; sku: string; config: any }): void {
+    if (!this.photo) return;
+
+    const price = parseFloat(event.config.price);
+    const productName = `${this.photo.title} - Framed Print (${event.config.display_attributes['Art Size']})`;
+
+    // Add framed photo to cart
+    this.cartService.addItem({
+      photoId: this.photo.id,
+      photoTitle: this.photo.title,
+      photoThumbnail: this.getPhotoUrl(),
+      productTypeId: 'framed',
+      productTypeName: 'Framed Print',
+      productSizeId: event.sku,
+      productSizeName: event.config.display_attributes['Art Size'],
+      unitPrice: price,
+      quantity: 1,
+      frameConfig: event.config
+    });
+
+    // Track add to cart event
+    this.analytics.trackAddToCart(this.photo.id, productName, price);
+
+    this.snackBar.open('Framed photo added to cart!', 'View Cart', {
+      duration: 3000,
+      horizontalPosition: 'end',
+      verticalPosition: 'top'
+    }).onAction().subscribe(() => {
+      this.router.navigate(['/cart']);
+    });
   }
 }

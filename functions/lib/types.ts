@@ -12,7 +12,12 @@ export interface Env {
   STRIPE_SECRET_KEY: string;
   STRIPE_WEBHOOK_SECRET: string;
   BAYPHOTO_API_KEY: string;
+  FRAMEITEASY_API_KEY: string;
+  FRAMEITEASY_API_URL: string;
   ENVIRONMENT: string;
+  GA4_PROPERTY_ID: string;
+  GA4_MEASUREMENT_ID: string;
+  GA4_SERVICE_ACCOUNT_KEY?: string;
 }
 
 // JWT Payload
@@ -152,3 +157,100 @@ export interface RequestContext {
   params?: Record<string, string>;
   user?: JWTPayload;
 }
+
+// Frame It Easy Types
+export interface FrameItEasyItem {
+  attributes: {
+    profile_name: string;
+    profile_material: string;
+    color_name: string;
+    cover_name: string;
+    backing_name: string;
+    width: number;
+    height: number;
+    outer_mat_type_name?: string;
+    outer_mat_design_name?: string;
+    outer_mat_width?: number;
+    inner_mat_type_name?: string;
+    inner_mat_design_name?: string;
+    inner_mat_width?: number;
+    custom_print: number;
+  };
+  display_attributes: {
+    "Art Size": string;
+    "Outside Frame Size": string;
+    Style: string;
+    "Outer Mat"?: string;
+    "Inner Mat"?: string;
+    Cover: string;
+    Backing: string;
+  };
+  is_valid: boolean;
+  name: string;
+  price: string;
+  quantity: number;
+  sku: string;
+  shipping_estimate?: {
+    price: string;
+    shipping_template_group: string;
+    shipping_method: number;
+  };
+}
+
+export interface FrameItEasyItemsResponse {
+  styles: Array<{
+    profile_name: string;
+    color_name: string;
+    profile_width_num: string;
+    profile_width_frac: string;
+    profile_min_width_num: string;
+    profile_min_width_frac: string;
+    profile_max_width_num: string;
+    profile_max_width_frac: string;
+    profile_max_width_complete: string;
+    profile_max_height_complete: string;
+  }>;
+  covers: Array<{
+    cover_name: string;
+  }>;
+  backings: Array<{
+    backing_name: string;
+  }>;
+  mats: Array<{
+    mat_type_id: string;
+    mat_type_name: string;
+    mat_design_id: string;
+    mat_design_name: string;
+  }>;
+}
+
+export interface FrameItEasyOrderRequest {
+  items: Array<{
+    sku: string;
+    quantity: number;
+    image_url?: string;
+  }>;
+  shipping: {
+    first_name: string;
+    last_name: string;
+    address1: string;
+    address2?: string;
+    city: string;
+    state: string;
+    zip: string;
+    country: string;
+    phone?: string;
+    email: string;
+  };
+}
+
+export interface FrameItEasyOrder {
+  id: string;
+  order_number: string;
+  status: string;
+  total: string;
+  created_at: string;
+  shipping_tracking?: string;
+  shipping_carrier?: string;
+}
+

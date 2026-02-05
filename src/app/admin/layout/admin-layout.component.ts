@@ -191,7 +191,7 @@ export class AdminLayoutComponent implements OnInit {
   currentUser: User | null = null;
 
   navItems: NavItem[] = [
-    { label: 'Dashboard', icon: 'dashboard', route: '/admin' },
+    { label: 'Dashboard', icon: 'dashboard', route: '/admin/dashboard' },
     { label: 'Photos', icon: 'photo_library', route: '/admin/photos' },
     { label: 'Categories', icon: 'category', route: '/admin/categories' },
     { label: 'Orders', icon: 'shopping_cart', route: '/admin/orders' },

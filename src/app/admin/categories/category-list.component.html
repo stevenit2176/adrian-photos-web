@@ -1,13 +1,20 @@
-<mat-card>
-  <mat-card-header>
-    <mat-card-title>Category Management</mat-card-title>
-    <button mat-raised-button color="primary" (click)="openCreateDialog()">
-      <mat-icon>add</mat-icon>
-      Add Category
-    </button>
-  </mat-card-header>
+<div class="admin-page">
+  <div class="admin-page-header">
+    <div class="header-content">
+      <h1>Categories</h1>
+      <p class="subtitle">Organize your photos into categories</p>
+    </div>
+    <div class="header-actions">
+      <button mat-raised-button color="primary" (click)="openCreateDialog()">
+        <mat-icon>add</mat-icon>
+        Add Category
+      </button>
+    </div>
+  </div>
 
-  <mat-card-content>
+  <div class="page-content">
+    <mat-card>
+      <mat-card-content>
     <div class="table-container">
       <table mat-table [dataSource]="dataSource" class="categories-table">
         
@@ -102,3 +109,5 @@
     </div>
   </mat-card-content>
 </mat-card>
+  </div>
+</div>

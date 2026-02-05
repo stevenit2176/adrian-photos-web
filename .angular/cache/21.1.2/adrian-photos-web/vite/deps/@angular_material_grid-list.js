@@ -1,12 +1,12 @@
 import "./chunk-42QFQP6S.js";
 import "./chunk-N4DOILP3.js";
 import {
-  coerceNumberProperty
-} from "./chunk-LBPJ2FKO.js";
-import {
   BidiModule,
   Directionality
 } from "./chunk-J7LDFMA4.js";
+import {
+  coerceNumberProperty
+} from "./chunk-2LLKJ6AN.js";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -33,8 +33,8 @@ import {
   ɵɵprojectionDef,
   ɵɵqueryRefresh
 } from "./chunk-6B6Q25JZ.js";
-import "./chunk-HWYXSU2G.js";
 import "./chunk-JRFR6BLO.js";
+import "./chunk-HWYXSU2G.js";
 import {
   startWith
 } from "./chunk-MARUHEWW.js";

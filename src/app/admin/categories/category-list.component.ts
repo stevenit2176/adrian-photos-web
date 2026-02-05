@@ -57,7 +57,7 @@ export class CategoryListComponent implements OnInit {
 
   loadCategories(): void {
     this.isLoading = true;
-    this.categoryService.getCategories().subscribe({
+    this.categoryService.getCategories(true).subscribe({
       next: (categories: Category[]) => {
         this.dataSource.data = categories;
         this.isLoading = false;

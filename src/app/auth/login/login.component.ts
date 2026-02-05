@@ -74,9 +74,14 @@ export class LoginComponent implements OnInit {
           verticalPosition: 'top'
         });
         
+        this.loading = false;
+        
         // Redirect admins to admin dashboard, others to return URL or home
         if (user.role === 'admin') {
-          this.router.navigate(['/admin']);
+          console.log('[LoginComponent] Admin user detected, redirecting to dashboard');
+          this.router.navigate(['/admin/dashboard']).then(success => {
+            console.log('[LoginComponent] Navigation to /admin/dashboard:', success ? 'successful' : 'failed');
+          });
         } else {
           this.router.navigate([this.returnUrl]);
         }

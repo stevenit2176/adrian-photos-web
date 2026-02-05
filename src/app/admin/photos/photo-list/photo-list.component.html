@@ -1,11 +1,18 @@
-<div class="photo-list-container">
-  <div class="header">
-    <h1>Photo Management</h1>
-    <button mat-raised-button color="primary" (click)="navigateToUpload()">
-      <mat-icon>add_photo_alternate</mat-icon>
-      Upload Photo
-    </button>
+<div class="admin-page">
+  <div class="admin-page-header">
+    <div class="header-content">
+      <h1>Photos</h1>
+      <p class="subtitle">Manage your photography portfolio</p>
+    </div>
+    <div class="header-actions">
+      <button mat-raised-button color="primary" (click)="navigateToUpload()">
+        <mat-icon>add_photo_alternate</mat-icon>
+        Upload Photo
+      </button>
+    </div>
   </div>
+
+  <div class="page-content">
 
   <mat-card class="filter-card">
     <mat-card-content>
@@ -121,4 +128,5 @@
       </div>
     </mat-card-content>
   </mat-card>
+  </div>
 </div>

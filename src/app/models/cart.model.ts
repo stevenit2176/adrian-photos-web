@@ -10,6 +10,7 @@ export interface CartItem {
   unitPrice: number; // in cents
   quantity: number;
   total: number; // unitPrice * quantity
+  frameConfig?: any; // Frame It Easy configuration for framed products
 }
 
 export interface Cart {
@@ -41,4 +42,5 @@ export interface AddToCartRequest {
   productSizeName: string;
   unitPrice: number;
   quantity?: number;
+  frameConfig?: any; // Frame It Easy configuration for framed products
 }

@@ -10,6 +10,13 @@ export async function onRequest(context: any): Promise<Response> {
   const { request, env } = context;
   const url = new URL(request.url);
   
+  // Only handle API routes and OPTIONS requests
+  // Let everything else pass through to static files
+  if (!url.pathname.startsWith('/api/')) {
+    // Not an API route - pass through to static files
+    return context.next();
+  }
+  
   // Handle image serving from R2
   if (url.pathname.startsWith('/api/photos/image/')) {
     try {

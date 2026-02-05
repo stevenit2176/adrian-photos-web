@@ -11,7 +11,7 @@
   width: 100%;
   max-width: 450px;
   padding: 2rem;
-  box-shadow: 0 8px 24px rgba(80, 90, 97, 0.15);
+  box-shadow: 0 8px 24px rgba(48, 29, 0, 0.15);
 }
 
 mat-card-header {
@@ -57,10 +57,10 @@ form {
   font-size: 1rem;
   font-weight: 800;
   color: #ffffff;
-  background-color: #616e76 !important;
+  background-color: #e2bf55 !important;
   
   &:hover {
-    background-color: #505a61 !important;
+    background-color: #e2bf55 !important;
   }
   
   mat-spinner {

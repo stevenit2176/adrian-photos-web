@@ -13,6 +13,7 @@ export interface Category {
   isActive: number | boolean; // SQLite returns 0/1
   imageR2Key?: string;
   imageAltText?: string;
+  photoCount?: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -23,10 +24,12 @@ export interface Category {
 export class CategoryService {
   constructor(private http: HttpClient) {}
 
-  getCategories(): Observable<Category[]> {
-    return this.http.get<{ success: boolean; data: { categories: Category[] } }>(
-      `${environment.apiUrl}/categories`
-    ).pipe(
+  getCategories(includeInactive = false): Observable<Category[]> {
+    const url = includeInactive 
+      ? `${environment.apiUrl}/categories?includeInactive=true`
+      : `${environment.apiUrl}/categories`;
+      
+    return this.http.get<{ success: boolean; data: { categories: Category[] } }>(url).pipe(
       map(response => {
         if (response.success) {
           return response.data.categories;

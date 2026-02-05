@@ -6,14 +6,14 @@ import {
 } from "./chunk-A4PJPGWV.js";
 import "./chunk-7QGTY3QT.js";
 import {
+  BidiModule
+} from "./chunk-J7LDFMA4.js";
+import {
   HttpClient
 } from "./chunk-AYCRYVEV.js";
 import "./chunk-DWKJHJ24.js";
 import "./chunk-4WOZXGPH.js";
 import "./chunk-VU4QIIZC.js";
-import {
-  BidiModule
-} from "./chunk-J7LDFMA4.js";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -43,10 +43,10 @@ import {
   ɵɵprojection,
   ɵɵprojectionDef
 } from "./chunk-6B6Q25JZ.js";
+import "./chunk-JRFR6BLO.js";
 import {
   forkJoin
 } from "./chunk-HWYXSU2G.js";
-import "./chunk-JRFR6BLO.js";
 import {
   Subscription,
   catchError,

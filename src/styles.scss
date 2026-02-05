@@ -3,11 +3,10 @@
 
 @include mat.core();
 
-// Define a light theme with typography
+// Use a neutral theme and override all colors with CSS variables
 $theme: mat.define-theme((
   color: (
     theme-type: light,
-    primary: mat.$azure-palette,
   ),
   typography: (
     brand-family: 'Barlow',
@@ -21,21 +20,99 @@ $theme: mat.define-theme((
 html {
   @include mat.all-component-themes($theme);
   
-  // Override Material colors with your custom colors using CSS variables
-  --mat-toolbar-container-background-color: #616e76;
-  --mat-toolbar-container-text-color: #ffffff;
+  // FORCE override all Material button colors with brand gold
+  // Using !important to override theme-generated styles
   
-  // Primary color overrides - using secondary color (#e2bf55) for buttons
-  --mdc-filled-button-container-color: #e2bf55;
-  --mdc-protected-button-container-color: #e2bf55;
-  --mdc-filled-button-label-text-color: #ffffff;
-  --mdc-protected-button-label-text-color: #ffffff;
-  --mat-fab-foreground-color: #ffffff;
+  // Toolbar
+  --mat-toolbar-container-background-color: #616e76 !important;
+  --mat-toolbar-container-text-color: #ffffff !important;
+  
+  // Override Material's primary color to use gold for all buttons
+  --mat-filled-button-state-layer-color: #e2bf55 !important;
+  --mat-filled-button-ripple-color: rgba(226, 191, 85, 0.12) !important;
+  --mat-protected-button-state-layer-color: #e2bf55 !important;
+  --mat-protected-button-ripple-color: rgba(226, 191, 85, 0.12) !important;
+  
+  // Filled/Raised Buttons - Use gold for primary actions
+  --mdc-filled-button-container-color: #e2bf55 !important;
+  --mdc-filled-button-label-text-color: #1a1a1a !important;
+  --mdc-filled-button-hover-label-text-color: #1a1a1a !important;
+  --mdc-filled-button-hover-state-layer-color: #e69e05 !important;
+  --mdc-filled-button-pressed-state-layer-color: #e69e05 !important;
+  --mdc-protected-button-container-color: #e2bf55 !important;
+  --mdc-protected-button-label-text-color: #1a1a1a !important;
+  --mdc-protected-button-hover-label-text-color: #1a1a1a !important;
+  
+  // Override theme-generated color-specific variables
+  --mat-protected-button-container-color: #e2bf55 !important;
+  --mat-protected-button-label-text-color: #1a1a1a !important;
+  
+  // FAB (Floating Action Button)
   --mat-fab-background-color: #e2bf55;
+  --mat-fab-foreground-color: #1a1a1a;
+  --mat-fab-small-background-color: #e2bf55;
+  --mat-fab-small-foreground-color: #1a1a1a;
   
-  // Secondary/Accent color
-  --mat-accent-color: #e2bf55;
+  // Text Buttons
   --mdc-text-button-label-text-color: #616e76;
+  --mdc-text-button-hover-label-text-color: #616e76;
+  
+  // Outlined Buttons
+  --mdc-outlined-button-label-text-color: #e2bf55;
+  --mdc-outlined-button-outline-color: #e2bf55;
+  --mdc-outlined-button-hover-label-text-color: #e2bf55;
+  --mdc-outlined-button-hover-outline-color: #e69e05;
+  
+  // Form Fields
+  --mdc-outlined-text-field-focus-outline-color: #e2bf55;
+  --mdc-outlined-text-field-focus-label-text-color: #e2bf55;
+  --mdc-outlined-text-field-caret-color: #e2bf55;
+  --mdc-outlined-text-field-hover-outline-color: #e69e05;
+  --mat-select-focused-arrow-color: #e2bf55;
+  --mat-select-panel-background-color: #ffffff;
+  
+  // Progress Indicators
+  --mdc-circular-progress-active-indicator-color: #e2bf55;
+  --mdc-linear-progress-active-indicator-color: #e2bf55;
+  
+  // Checkboxes
+  --mdc-checkbox-selected-checkmark-color: #1a1a1a;
+  --mdc-checkbox-selected-icon-color: #e2bf55;
+  --mdc-checkbox-selected-container-color: #e2bf55;
+  --mdc-checkbox-selected-hover-icon-color: #e69e05;
+  --mdc-checkbox-selected-pressed-icon-color: #e69e05;
+  
+  // Radio Buttons
+  --mdc-radio-selected-icon-color: #e2bf55;
+  --mdc-radio-selected-hover-icon-color: #e69e05;
+  --mdc-radio-selected-pressed-icon-color: #e69e05;
+  
+  // Switches
+  --mdc-switch-selected-track-color: #e2bf55;
+  --mdc-switch-selected-handle-color: #e2bf55;
+  --mdc-switch-selected-hover-handle-color: #e69e05;
+  --mdc-switch-selected-focus-handle-color: #e69e05;
+  --mdc-switch-selected-pressed-handle-color: #e69e05;
+  
+  // Tabs
+  --mat-tab-header-active-label-text-color: #e2bf55;
+  --mat-tab-header-active-focus-label-text-color: #e2bf55;
+  --mat-tab-header-active-hover-label-text-color: #e69e05;
+  --mat-tab-header-active-ripple-color: rgba(226, 191, 85, 0.12);
+  --mdc-tab-indicator-active-indicator-color: #e2bf55;
+  
+  // Chips
+  --mdc-chip-elevated-container-color: #e2bf55;
+  --mdc-chip-label-text-color: #1a1a1a;
+  
+  // Sliders
+  --mdc-slider-active-track-color: #e2bf55;
+  --mdc-slider-handle-color: #e2bf55;
+  --mdc-slider-focus-handle-color: #e69e05;
+  --mdc-slider-hover-handle-color: #e69e05;
+  
+  // Links (anchor tags in Material components)
+  --mat-text-button-state-layer-color: #616e76;
 }
 
 /* Global Styles */
@@ -48,7 +125,7 @@ html {
 html, body {
   height: 100%;
   font-family: 'Barlow', sans-serif;
-  background-color: #fafafa;
+  background-color: #f0efef;
 }
 
 /* Typography */
@@ -73,4 +150,54 @@ p, span, a, button, input, textarea, label {
 
 .mat-mdc-card {
   border-radius: 8px !important;
+}
+
+// Material button color helpers - Override to use gold for raised/filled buttons only
+.mat-mdc-raised-button.mat-primary,
+.mat-mdc-unelevated-button.mat-primary {
+  --mdc-filled-button-container-color: #e2bf55 !important;
+  --mdc-filled-button-label-text-color: #1a1a1a !important;
+  --mdc-filled-button-hover-state-layer-color: rgba(230, 158, 5, 0.08) !important;
+  --mdc-filled-button-pressed-state-layer-color: rgba(230, 158, 5, 0.12) !important;
+  
+  // Override Material 3 theme-specific variables
+  --mat-protected-button-container-color: #e2bf55 !important;
+  --mat-protected-button-label-text-color: #1a1a1a !important;
+  --mat-protected-button-state-layer-color: #e2bf55 !important;
+  --mat-filled-button-state-layer-color: #e2bf55 !important;
+  
+  // Direct property override as last resort
+  background-color: #e2bf55 !important;
+  
+  .mdc-button__label {
+    color: #1a1a1a !important;
+  }
+  
+  .mat-icon {
+    color: #1a1a1a !important;
+  }
+}
+
+.mat-mdc-button.mat-primary {
+  --mdc-text-button-label-text-color: #616e76 !important;
+}
+
+.mat-mdc-outlined-button.mat-primary {
+  --mdc-outlined-button-label-text-color: #e2bf55 !important;
+  --mdc-outlined-button-outline-color: #e2bf55 !important;
+}
+
+.mat-accent,
+.mat-secondary {
+  --mdc-filled-button-container-color: #e2bf55 !important;
+  --mdc-filled-button-label-text-color: #1a1a1a !important;
+  --mdc-text-button-label-text-color: #e2bf55 !important;
+  --mdc-outlined-button-label-text-color: #e2bf55 !important;
+  --mdc-outlined-button-outline-color: #e2bf55 !important;
+}
+
+.mat-warn {
+  --mdc-filled-button-container-color: #f44336 !important;
+  --mdc-text-button-label-text-color: #f44336 !important;
+  --mdc-outlined-button-label-text-color: #f44336 !important;
 }

@@ -246,12 +246,21 @@ export async function deleteExpiredRefreshTokens(db: D1Database): Promise<void> 
 // ==================== Category Queries ====================
 
 /**
- * Get all active categories
+ * Get all active categories with photo counts
  */
 export async function getCategories(db: D1Database, includeInactive = false): Promise<any[]> {
   const sql = includeInactive
-    ? `SELECT * FROM categories ORDER BY display_order, name`
-    : `SELECT * FROM categories WHERE is_active = 1 ORDER BY display_order, name`;
+    ? `SELECT c.*, COUNT(pc.photo_id) as photo_count 
+       FROM categories c 
+       LEFT JOIN photos_categories pc ON c.id = pc.category_id 
+       GROUP BY c.id 
+       ORDER BY c.display_order, c.name`
+    : `SELECT c.*, COUNT(pc.photo_id) as photo_count 
+       FROM categories c 
+       LEFT JOIN photos_categories pc ON c.id = pc.category_id 
+       WHERE c.is_active = 1 
+       GROUP BY c.id 
+       ORDER BY c.display_order, c.name`;
   
   return query(db, sql);
 }

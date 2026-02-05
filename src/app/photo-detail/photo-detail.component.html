@@ -31,56 +31,71 @@
           <mat-card-content>
             <p class="description">{{ photo.description }}</p>
 
-            <div class="product-selection">
-              <h3>Select Product & Size</h3>
-
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Product Type</mat-label>
-                <mat-select [(ngModel)]="selectedProduct" (selectionChange)="onProductChange()">
-                  <mat-option *ngFor="let product of products" [value]="product">
-                    {{ product.name }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-
-              <mat-form-field appearance="outline" class="full-width" *ngIf="selectedProduct">
-                <mat-label>Size</mat-label>
-                <mat-select [(ngModel)]="selectedSize">
-                  <mat-option *ngFor="let size of selectedProduct.sizes" [value]="size">
-                    {{ size.name }} - {{ formatPrice(size.basePrice) }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-
-              <mat-form-field appearance="outline" class="quantity-field">
-                <mat-label>Quantity</mat-label>
-                <input matInput type="number" [(ngModel)]="quantity" min="1" max="99">
-              </mat-form-field>
-
-              <div class="price-summary" *ngIf="selectedSize">
-                <div class="price-row">
-                  <span>Price:</span>
-                  <span class="price">{{ formatPrice(selectedSize.basePrice) }}</span>
+            <mat-tab-group [(selectedIndex)]="selectedTabIndex">
+              <mat-tab label="Custom Framed">
+                <div class="tab-content">
+                  <app-frame-configurator 
+                    [photoId]="photo.id"
+                    [photoImageUrl]="getPhotoUrl()"
+                    (addToCart)="onFrameAddToCart($event)">
+                  </app-frame-configurator>
                 </div>
-                <div class="price-row total" *ngIf="quantity > 1">
-                  <span>Total ({{ quantity }} items):</span>
-                  <span class="price">{{ formatPrice(selectedSize.basePrice * quantity) }}</span>
+              </mat-tab>
+
+              <mat-tab label="Print Only">
+                <div class="product-selection">
+                  <h3>Select Product & Size</h3>
+
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Product Type</mat-label>
+                    <mat-select [(ngModel)]="selectedProduct" (selectionChange)="onProductChange()">
+                      <mat-option *ngFor="let product of products" [value]="product">
+                        {{ product.name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="full-width" *ngIf="selectedProduct">
+                    <mat-label>Size</mat-label>
+                    <mat-select [(ngModel)]="selectedSize">
+                      <mat-option *ngFor="let size of selectedProduct.sizes" [value]="size">
+                        {{ size.name }} - {{ formatPrice(size.basePrice) }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="quantity-field">
+                    <mat-label>Quantity</mat-label>
+                    <input matInput type="number" [(ngModel)]="quantity" min="1" max="99">
+                  </mat-form-field>
+
+                  <div class="price-summary" *ngIf="selectedSize">
+                    <div class="price-row">
+                      <span>Price:</span>
+                      <span class="price">{{ formatPrice(selectedSize.basePrice) }}</span>
+                    </div>
+                    <div class="price-row total" *ngIf="quantity > 1">
+                      <span>Total ({{ quantity }} items):</span>
+                      <span class="price">{{ formatPrice(selectedSize.basePrice * quantity) }}</span>
+                    </div>
+                  </div>
+
+                  <button 
+                    mat-raised-button 
+                    color="primary" 
+                    class="add-to-cart-btn"
+                    [disabled]="!canAddToCart()"
+                    (click)="addToCart()">
+                    <mat-icon>add_shopping_cart</mat-icon>
+                    Add to Cart
+                  </button>
                 </div>
-              </div>
-            </div>
+              </mat-tab>
+            </mat-tab-group>
           </mat-card-content>
 
           <mat-card-actions>
-            <button 
-              mat-raised-button 
-              color="primary" 
-              class="add-to-cart-btn"
-              [disabled]="!canAddToCart()"
-              (click)="addToCart()">
-              <mat-icon>add_shopping_cart</mat-icon>
-              Add to Cart
-            </button>
-            <button mat-button routerLink="/gallery">
+            <button mat-button routerLink="/gallery" class="continue-shopping-link">
               Continue Shopping
             </button>
           </mat-card-actions>

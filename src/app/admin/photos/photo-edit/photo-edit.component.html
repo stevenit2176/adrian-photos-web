@@ -1,4 +1,4 @@
-<div class="photo-edit-container">
+<div class="admin-page">
   <!-- Loading State -->
   <div *ngIf="isLoading" class="loading-container">
     <mat-spinner></mat-spinner>
@@ -6,17 +6,21 @@
   </div>
 
   <!-- Edit Form -->
-  <div *ngIf="!isLoading && photo" class="edit-content">
-    <mat-card>
-      <mat-card-header>
-        <div class="header-content">
-          <button mat-icon-button (click)="cancel()" class="back-button">
-            <mat-icon>arrow_back</mat-icon>
-          </button>
-          <h1>Edit Photo</h1>
-        </div>
-      </mat-card-header>
+  <div *ngIf="!isLoading && photo" class="page-content">
+    <div class="admin-page-header">
+      <div class="header-content">
+        <h1>Edit Photo</h1>
+        <p class="subtitle">Update photo details and metadata</p>
+      </div>
+      <div class="header-actions">
+        <button mat-button (click)="cancel()">
+          <mat-icon>arrow_back</mat-icon>
+          Back to Photos
+        </button>
+      </div>
+    </div>
 
+    <mat-card>
       <mat-card-content>
         <div class="content-layout">
           <!-- Photo Preview -->

@@ -1,13 +1,18 @@
-<div class="photo-upload-container">
-  <div class="header">
-    <h1>Upload Photo</h1>
-    <button mat-button (click)="cancel()">
-      <mat-icon>arrow_back</mat-icon>
-      Back to Photos
-    </button>
+<div class="admin-page">
+  <div class="admin-page-header">
+    <div class="header-content">
+      <h1>Upload Photo</h1>
+      <p class="subtitle">Add new photos to your portfolio</p>
+    </div>
+    <div class="header-actions">
+      <button mat-button (click)="cancel()">
+        <mat-icon>arrow_back</mat-icon>
+        Back to Photos
+      </button>
+    </div>
   </div>
 
-  <div class="upload-content">
+  <div class="page-content">
     <mat-card class="upload-card">
       <mat-card-content>
         <!-- File Drop Zone -->

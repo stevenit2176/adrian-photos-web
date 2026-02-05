@@ -1,54 +1,62 @@
 import {
+  ErrorStateMatcher,
+  _ErrorStateTracker
+} from "./chunk-G7KFYTBS.js";
+import {
+  MatFormFieldModule
+} from "./chunk-IKRTEY4Z.js";
+import {
+  MAT_FORM_FIELD,
+  MatError,
+  MatFormField,
+  MatFormFieldControl,
+  MatHint,
+  MatLabel,
+  MatPrefix,
+  MatSuffix
+} from "./chunk-OVRMGCED.js";
+import "./chunk-4D2K7QAA.js";
+import {
+  AutofillMonitor,
+  TextFieldModule
+} from "./chunk-LZLRIDDO.js";
+import {
   FormGroupDirective,
   NgControl,
   NgForm,
   Validators
 } from "./chunk-GRF7PEQV.js";
 import {
-  MAT_FORM_FIELD,
-  MatError,
-  MatFormField,
-  MatFormFieldControl,
-  MatFormFieldModule,
-  MatHint,
-  MatLabel,
-  MatPrefix,
-  MatSuffix
-} from "./chunk-F5KFRKQL.js";
-import {
-  AutofillMonitor,
-  TextFieldModule
-} from "./chunk-7EHX7DCZ.js";
-import {
-  _IdGenerator
-} from "./chunk-7VXILYVS.js";
+  getSupportedInputTypes
+} from "./chunk-Z44L44BL.js";
+import "./chunk-VON75VBJ.js";
 import {
   coerceBooleanProperty
 } from "./chunk-42QFQP6S.js";
-import "./chunk-TK4GV7QI.js";
-import {
-  getSupportedInputTypes
-} from "./chunk-QSNFVUPW.js";
 import "./chunk-GUGIMSVJ.js";
+import {
+  _IdGenerator
+} from "./chunk-V4FR5IJ4.js";
+import "./chunk-XA6252L2.js";
+import "./chunk-TK4GV7QI.js";
 import "./chunk-A4PJPGWV.js";
 import "./chunk-7QGTY3QT.js";
-import "./chunk-AYCRYVEV.js";
-import "./chunk-ZUNOV2FN.js";
+import "./chunk-Q2B2IBJE.js";
 import "./chunk-N4DOILP3.js";
-import "./chunk-LBPJ2FKO.js";
+import {
+  BidiModule
+} from "./chunk-J7LDFMA4.js";
+import "./chunk-AYCRYVEV.js";
 import "./chunk-DWKJHJ24.js";
 import {
   Platform
 } from "./chunk-LLPEP5IT.js";
+import "./chunk-2LLKJ6AN.js";
 import "./chunk-4WOZXGPH.js";
 import "./chunk-VU4QIIZC.js";
 import {
-  BidiModule
-} from "./chunk-J7LDFMA4.js";
-import {
   Directive,
   ElementRef,
-  Injectable,
   InjectionToken,
   Input,
   NgModule,
@@ -64,14 +72,13 @@ import {
   ɵɵattribute,
   ɵɵclassProp,
   ɵɵdefineDirective,
-  ɵɵdefineInjectable,
   ɵɵdefineInjector,
   ɵɵdefineNgModule,
   ɵɵdomProperty,
   ɵɵlistener
 } from "./chunk-6B6Q25JZ.js";
-import "./chunk-HWYXSU2G.js";
 import "./chunk-JRFR6BLO.js";
+import "./chunk-HWYXSU2G.js";
 import {
   Subject
 } from "./chunk-MARUHEWW.js";
@@ -79,75 +86,6 @@ import "./chunk-WDMUDEB6.js";
 
 // node_modules/@angular/material/fesm2022/_input-value-accessor-chunk.mjs
 var MAT_INPUT_VALUE_ACCESSOR = new InjectionToken("MAT_INPUT_VALUE_ACCESSOR");
-
-// node_modules/@angular/material/fesm2022/_error-options-chunk.mjs
-var ShowOnDirtyErrorStateMatcher = class _ShowOnDirtyErrorStateMatcher {
-  isErrorState(control, form) {
-    return !!(control && control.invalid && (control.dirty || form && form.submitted));
-  }
-  static ɵfac = function ShowOnDirtyErrorStateMatcher_Factory(__ngFactoryType__) {
-    return new (__ngFactoryType__ || _ShowOnDirtyErrorStateMatcher)();
-  };
-  static ɵprov = ɵɵdefineInjectable({
-    token: _ShowOnDirtyErrorStateMatcher,
-    factory: _ShowOnDirtyErrorStateMatcher.ɵfac
-  });
-};
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(ShowOnDirtyErrorStateMatcher, [{
-    type: Injectable
-  }], null, null);
-})();
-var ErrorStateMatcher = class _ErrorStateMatcher {
-  isErrorState(control, form) {
-    return !!(control && control.invalid && (control.touched || form && form.submitted));
-  }
-  static ɵfac = function ErrorStateMatcher_Factory(__ngFactoryType__) {
-    return new (__ngFactoryType__ || _ErrorStateMatcher)();
-  };
-  static ɵprov = ɵɵdefineInjectable({
-    token: _ErrorStateMatcher,
-    factory: _ErrorStateMatcher.ɵfac,
-    providedIn: "root"
-  });
-};
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(ErrorStateMatcher, [{
-    type: Injectable,
-    args: [{
-      providedIn: "root"
-    }]
-  }], null, null);
-})();
-
-// node_modules/@angular/material/fesm2022/_error-state-chunk.mjs
-var _ErrorStateTracker = class {
-  _defaultMatcher;
-  ngControl;
-  _parentFormGroup;
-  _parentForm;
-  _stateChanges;
-  errorState = false;
-  matcher;
-  constructor(_defaultMatcher, ngControl, _parentFormGroup, _parentForm, _stateChanges) {
-    this._defaultMatcher = _defaultMatcher;
-    this.ngControl = ngControl;
-    this._parentFormGroup = _parentFormGroup;
-    this._parentForm = _parentForm;
-    this._stateChanges = _stateChanges;
-  }
-  updateErrorState() {
-    const oldState = this.errorState;
-    const parent = this._parentFormGroup || this._parentForm;
-    const matcher = this.matcher || this._defaultMatcher;
-    const control = this.ngControl ? this.ngControl.control : null;
-    const newState = matcher?.isErrorState(control, parent) ?? false;
-    if (newState !== oldState) {
-      this.errorState = newState;
-      this._stateChanges.next();
-    }
-  }
-};
 
 // node_modules/@angular/material/fesm2022/input.mjs
 function getMatInputUnsupportedTypeError(type) {

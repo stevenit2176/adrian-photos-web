@@ -1,0 +1,212 @@
+@import '../styles/admin-page-base';
+
+.analytics {
+  // Analytics-specific styles
+}
+
+// Stats grid
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  // Color variations
+  &.visitors .stat-icon,
+  &.visitors-week .stat-icon,
+  &.visitors-today .stat-icon,
+  &.pageviews .stat-icon,
+  &.session-duration .stat-icon,
+  &.visitors-month .stat-icon {
+    background: linear-gradient(135deg, #e2bf55 0%, #e69e05 100%);
+  }
+}
+
+// Top Pages Card
+.top-pages-card {
+  margin-bottom: 32px;
+
+  .page-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .page-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border-left: 3px solid #e2bf55;
+
+    .page-path {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600;
+      color: #616e76;
+      font-size: 14px;
+    }
+
+    .page-views {
+      font-family: 'Barlow', sans-serif;
+      font-size: 13px;
+      color: #999;
+      font-weight: 600;
+    }
+  }
+}
+
+// Analytics notice card
+.analytics-notice {
+  margin-bottom: 32px;
+
+  .notice-content {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+
+    .notice-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+      color: #e2bf55;
+      flex-shrink: 0;
+    }
+
+    .notice-text {
+      flex: 1;
+
+      h3 {
+        font-family: 'Prata', serif;
+        font-size: 20px;
+        color: #616e76;
+        margin: 0 0 16px 0;
+      }
+
+      p {
+        font-family: 'Barlow', sans-serif;
+        font-size: 14px;
+        line-height: 1.6;
+        color: #616e76;
+        margin: 0 0 12px 0;
+
+        strong {
+          color: #616e76;
+          font-weight: 600;
+        }
+      }
+
+      .setup-note {
+        background: #fff8e1;
+        padding: 12px 16px;
+        border-radius: 6px;
+        border-left: 4px solid #ffc107;
+        margin: 16px 0;
+      }
+
+      .setup-steps {
+        background: #f8f9fa;
+        padding: 16px;
+        border-radius: 6px;
+        margin: 16px 0;
+
+        h4 {
+          font-family: 'Barlow', sans-serif;
+          font-size: 15px;
+          font-weight: 600;
+          color: #616e76;
+          margin: 0 0 12px 0;
+        }
+
+        ol {
+          margin: 0;
+          padding-left: 20px;
+          
+          li {
+            font-family: 'Barlow', sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #616e76;
+            margin-bottom: 12px;
+
+            strong {
+              color: #616e76;
+              font-weight: 600;
+            }
+
+            ul {
+              margin-top: 8px;
+              padding-left: 20px;
+
+              li {
+                margin-bottom: 4px;
+              }
+            }
+          }
+        }
+
+        code {
+          background: #e2bf55;
+          color: #1a1a1a;
+          padding: 2px 6px;
+          border-radius: 3px;
+          font-family: 'Courier New', monospace;
+          font-size: 13px;
+        }
+
+        a {
+          color: #e2bf55;
+          font-weight: 600;
+          text-decoration: none;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+
+      .current-config {
+        background: #e8f5e9;
+        padding: 12px 16px;
+        border-radius: 6px;
+        border-left: 4px solid #4caf50;
+        margin-top: 16px;
+
+        code {
+          background: #c8e6c9;
+          padding: 2px 6px;
+          border-radius: 3px;
+          font-family: 'Courier New', monospace;
+          font-size: 13px;
+        }
+
+        .status-badge {
+          display: inline-block;
+          padding: 2px 8px;
+          border-radius: 12px;
+          font-size: 12px;
+          font-weight: 600;
+          background: #ff9800;
+          color: white;
+
+          &.configured {
+            background: #4caf50;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .analytics-notice .notice-content {
+    flex-direction: column;
+  }
+}

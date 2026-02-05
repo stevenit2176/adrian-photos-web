@@ -1,0 +1,195 @@
+<div class="admin-page dashboard">
+  <div class="admin-page-header">
+    <div class="header-content">
+      <h1>Dashboard</h1>
+      <p class="subtitle">Welcome back! Here's what's happening with your store.</p>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    <!-- Visitors Card -->
+    <mat-card class="stat-card visitors">
+      <mat-card-content>
+        <div class="stat-icon">
+          <mat-icon>people</mat-icon>
+        </div>
+        <div class="stat-info">
+          <div class="stat-label">Total Visitors</div>
+          @if (loadingAnalytics) {
+            <mat-spinner diameter="30"></mat-spinner>
+          } @else {
+            <div class="stat-value">{{ stats.totalVisitors?.toLocaleString() || '0' }}</div>
+            <div class="stat-change neutral">All time</div>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Visitors This Week Card -->
+    <mat-card class="stat-card visitors-week">
+      <mat-card-content>
+        <div class="stat-icon">
+          <mat-icon>trending_up</mat-icon>
+        </div>
+        <div class="stat-info">
+          <div class="stat-label">Visitors This Week</div>
+          @if (loadingAnalytics) {
+            <mat-spinner diameter="30"></mat-spinner>
+          } @else {
+            <div class="stat-value">{{ stats.visitorsThisWeek?.toLocaleString() || '0' }}</div>
+            <div class="stat-change positive">Active engagement</div>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Page Views Card -->
+    <mat-card class="stat-card pageviews">
+      <mat-card-content>
+        <div class="stat-icon">
+          <mat-icon>visibility</mat-icon>
+        </div>
+        <div class="stat-info">
+          <div class="stat-label">Page Views</div>
+          @if (loadingAnalytics) {
+            <mat-spinner diameter="30"></mat-spinner>
+          } @else {
+            <div class="stat-value">{{ stats.pageViews?.toLocaleString() || '0' }}</div>
+            <div class="stat-change neutral">Total views</div>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- <mat-card class="stat-card orders">
+      <mat-card-content>
+        <div class="stat-icon">
+          <mat-icon>shopping_bag</mat-icon>
+        </div>
+        <div class="stat-info">
+          <div class="stat-label">Orders This Week</div>
+          <div class="stat-value">{{ stats.ordersLastWeek }}</div>
+          <div class="stat-change positive">+12% from last week</div>
+        </div>
+      </mat-card-content>
+    </mat-card> -->
+
+    <!-- <mat-card class="stat-card revenue">
+      <mat-card-content>
+        <div class="stat-icon">
+          <mat-icon>payments</mat-icon>
+        </div>
+        <div class="stat-info">
+          <div class="stat-label">Revenue This Month</div>
+          <div class="stat-value">${{ stats.revenueThisMonth.toLocaleString() }}</div>
+          <div class="stat-change positive">+8% from last month</div>
+        </div>
+      </mat-card-content>
+    </mat-card> -->
+
+    <mat-card class="stat-card photos">
+      <mat-card-content>
+        <div class="stat-icon">
+          <mat-icon>photo_library</mat-icon>
+        </div>
+        <div class="stat-info">
+          <div class="stat-label">Total Photos</div>
+          <div class="stat-value">{{ stats.totalPhotos }}</div>
+          <div class="stat-change neutral">Across 6 categories</div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+  </div>
+
+  <!-- Quick Link to Full Analytics -->
+  <mat-card class="analytics-quick-link">
+    <mat-card-content>
+      <div class="quick-link-content">
+        <div class="link-info">
+          <mat-icon>insights</mat-icon>
+          <div>
+            <h3>View Detailed Analytics</h3>
+            <p>See comprehensive traffic insights, top pages, and Google Analytics setup</p>
+          </div>
+        </div>
+        <button mat-raised-button color="primary" routerLink="/admin/analytics">
+          <mat-icon>arrow_forward</mat-icon>
+          Go to Analytics
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Quick Actions -->
+  <!-- <div class="quick-actions">
+    <h2>Quick Actions</h2>
+    <div class="action-buttons">
+      <button mat-raised-button color="primary" routerLink="/admin/photos/upload">
+        <mat-icon>cloud_upload</mat-icon>
+        Upload Photo
+      </button>
+      <button mat-raised-button routerLink="/admin/orders">
+        <mat-icon>shopping_cart</mat-icon>
+        View Orders
+      </button>
+      <button mat-raised-button routerLink="/admin/categories">
+        <mat-icon>category</mat-icon>
+        Manage Categories
+      </button>
+      <button mat-raised-button routerLink="/admin/products">
+        <mat-icon>inventory_2</mat-icon>
+        Manage Products
+      </button>
+    </div>
+  </div> -->
+
+  <!-- Recent Orders -->
+  <mat-card class="recent-orders">
+    <mat-card-header>
+      <mat-card-title>Recent Orders</mat-card-title>
+      <button mat-button routerLink="/admin/orders">View All</button>
+    </mat-card-header>
+    <mat-card-content>
+      <table mat-table [dataSource]="recentOrders" class="orders-table">
+        <ng-container matColumnDef="orderNumber">
+          <th mat-header-cell *matHeaderCellDef>Order #</th>
+          <td mat-cell *matCellDef="let order">{{ order.orderNumber }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="customer">
+          <th mat-header-cell *matHeaderCellDef>Customer</th>
+          <td mat-cell *matCellDef="let order">{{ order.customerName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="items">
+          <th mat-header-cell *matHeaderCellDef>Items</th>
+          <td mat-cell *matCellDef="let order">{{ order.items }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="total">
+          <th mat-header-cell *matHeaderCellDef>Total</th>
+          <td mat-cell *matCellDef="let order">${{ order.total.toFixed(2) }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let order">
+            <mat-chip [class]="'status-' + order.status">
+              {{ order.status | titlecase }}
+            </mat-chip>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef>Date</th>
+          <td mat-cell *matCellDef="let order">{{ order.date | date:'short' }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="order-row"></tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+</div>

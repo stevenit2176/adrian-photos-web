@@ -180,6 +180,41 @@
       font-family: 'Barlow', sans-serif;
       font-weight: 600;
     }
+    
+    .continue-shopping-link {
+      color: #e2bf55 !important;
+    }
+  }
+  
+  // Style mat-tab labels with secondary color
+  ::ng-deep .mat-mdc-tab-group {
+    .mat-mdc-tab {
+      color: #e2bf55 !important;
+      font-family: 'Barlow', sans-serif !important;
+      font-weight: 600 !important;
+      
+      .mdc-tab__text-label {
+        color: #e2bf55 !important;
+      }
+      
+      &.mdc-tab--active {
+        .mdc-tab__text-label {
+          color: #e2bf55 !important;
+        }
+      }
+    }
+    
+    .mat-mdc-tab-header {
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .mdc-tab-indicator__content--underline {
+      border-color: #e2bf55 !important;
+    }
+    
+    .mat-mdc-tab-body-content {
+      padding-top: 24px;
+    }
   }
 }
 
@@ -194,7 +229,7 @@
     font-size: 60px;
     width: 60px;
     height: 60px;
-    color: #616e76;
+    color: #e2bf55;
     animation: spin 1s linear infinite;
   }
   

@@ -1,0 +1,209 @@
+@import '../styles/admin-page-base';
+
+.dashboard {
+  // Dashboard-specific overrides can go here if needed
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+// Analytics quick link card
+.analytics-quick-link {
+  margin-bottom: 32px;
+
+  .quick-link-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+
+    .link-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+
+      mat-icon {
+        font-size: 48px;
+        width: 48px;
+        height: 48px;
+        color: #e2bf55;
+      }
+
+      h3 {
+        font-family: 'Prata', serif;
+        font-size: 18px;
+        color: #616e76;
+        margin: 0 0 4px 0;
+      }
+
+      p {
+        font-family: 'Barlow', sans-serif;
+        font-size: 14px;
+        color: #999;
+        margin: 0;
+      }
+    }
+
+    button {
+      flex-shrink: 0;
+    }
+  }
+}
+
+.stat-card {
+  // Color variations for dashboard
+  &.orders .stat-icon {
+    background: linear-gradient(135deg, #e2bf55 0%, #ff9800 100%);
+  }
+  
+  &.revenue .stat-icon {
+    background: linear-gradient(135deg, #e2bf55 0%, #ff9800 100%);
+  }
+  
+  &.photos .stat-icon {
+    background: linear-gradient(135deg, #e2bf55 0%, #ff9800 100%);
+  }
+  
+  &.pending .stat-icon {
+    background: linear-gradient(135deg, #e2bf55 0%, #ff9800 100%);
+  }
+
+  &.visitors .stat-icon {
+    background: linear-gradient(135deg, #e2bf55 0%, #ff9800 100%);
+  }
+
+  &.visitors-week .stat-icon {
+    background: linear-gradient(135deg, #e2bf55 0%, #ff9800 100%);
+  }
+
+  &.pageviews .stat-icon {
+    background: linear-gradient(135deg, #e2bf55 0%, #ff9800 100%);
+  }
+}
+
+.quick-actions {
+  margin-bottom: 32px;
+  
+  h2 {
+    font-family: 'Prata', serif;
+    font-size: 24px;
+    color: #616e76;
+    margin: 0 0 16px 0;
+  }
+  
+  .action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    
+    button {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 800;
+      
+      mat-icon {
+        margin-right: 8px;
+      }
+    }
+  }
+}
+
+.recent-orders {
+  mat-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    
+    mat-card-title {
+      font-family: 'Prata', serif;
+      font-size: 24px;
+      color: #616e76;
+      margin: 0;
+    }
+    
+    button {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 800;
+      color: #e2bf55;
+    }
+  }
+  
+  .orders-table {
+    width: 100%;
+    
+    th {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 800;
+      font-size: 14px;
+      color: #616e76;
+    }
+    
+    td {
+      font-family: 'Barlow', sans-serif;
+      font-size: 14px;
+      color: #666;
+    }
+    
+    .order-row {
+      cursor: pointer;
+      transition: background 0.2s ease;
+      
+      &:hover {
+        background: rgba(226, 191, 85, 0.05);
+      }
+    }
+  }
+  
+  mat-chip {
+    font-family: 'Barlow', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    
+    &.status-pending {
+      background: #fff3cd;
+      color: #856404;
+    }
+    
+    &.status-processing {
+      background: #cfe2ff;
+      color: #084298;
+    }
+    
+    &.status-shipped {
+      background: #d1e7dd;
+      color: #0f5132;
+    }
+    
+    &.status-completed {
+      background: #d1e7dd;
+      color: #0a3622;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    
+    button {
+      width: 100%;
+    }
+  }
+
+  .analytics-quick-link .quick-link-content {
+    flex-direction: column;
+    align-items: flex-start;
+
+    button {
+      width: 100%;
+    }
+  }
+}

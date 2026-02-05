@@ -37,6 +37,11 @@
                 "glob": "_redirects",
                 "input": "./",
                 "output": "/"
+              },
+              {
+                "glob": "_routes.json",
+                "input": "./",
+                "output": "/"
               }
             ],
             "styles": [

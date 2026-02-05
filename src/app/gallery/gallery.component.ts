@@ -88,15 +88,19 @@ export class GalleryComponent implements OnInit, OnDestroy {
       next: (categories) => {
         this.categories = categories.map(cat => ({
           ...cat,
-          imageUrl: this.defaultImages[cat.slug]?.card || this.defaultCardImage,
-          photoCount: 0 // Will be updated when we have real photos
+          imageUrl: cat.imageR2Key 
+            ? `/api/photos/image?key=${encodeURIComponent(cat.imageR2Key)}`
+            : this.defaultImages[cat.slug]?.card || this.defaultCardImage,
+          photoCount: cat.photoCount || 0
         }));
         
         // Use all categories for carousel
         this.carouselPhotos = categories.map(cat => ({
           ...cat,
-          imageUrl: this.defaultImages[cat.slug]?.carousel || this.defaultCarouselImage,
-          photoCount: 0
+          imageUrl: cat.imageR2Key 
+            ? `/api/photos/image?key=${encodeURIComponent(cat.imageR2Key)}`
+            : this.defaultImages[cat.slug]?.carousel || this.defaultCarouselImage,
+          photoCount: cat.photoCount || 0
         }));
         
         console.log('Carousel photos loaded:', this.carouselPhotos);

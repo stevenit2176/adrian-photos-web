@@ -1,0 +1,191 @@
+.frame-configurator {
+  max-width: 800px;
+  /* margin: 2rem auto; */
+
+  mat-card {
+    /* padding: 1.5rem; */
+    font-weight:100;
+  }
+
+  mat-card-header {
+    mat-card-title {
+      font-family: 'Prata', serif;
+      color: #616e76;
+      font-weight: normal;
+      
+      h3 {
+        font-weight:normal;
+        margin: 0;
+      }
+    }
+  }
+
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem;
+    
+    ::ng-deep mat-spinner circle {
+      stroke: #e2bf55 !important;
+    }
+    
+    p {
+      margin-top: 1rem;
+      color: #666;
+    }
+  }
+
+  .error-message {
+    background: #ffebee;
+    color: #c62828;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+  }
+
+  .config-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    mat-expansion-panel {
+      margin-bottom: 1rem;
+    }
+
+    mat-form-field {
+      width: 100%;
+      margin-bottom: 0.5rem;
+    }
+
+    .size-inputs {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+
+      mat-form-field {
+        flex: 1;
+      }
+
+      .size-separator {
+        font-size: 1.5rem;
+        color: #666;
+        margin-top: -1rem;
+      }
+    }
+
+    .mat-option {
+      margin-bottom: 1rem;
+
+      label {
+        display: flex;
+        align-items: center;
+        font-weight: 500;
+        cursor: pointer;
+        margin-bottom: 0.5rem;
+
+        input[type="checkbox"] {
+          margin-right: 0.5rem;
+          cursor: pointer;
+        }
+      }
+
+      .mat-config {
+        margin-left: 1.5rem;
+        padding-top: 0.5rem;
+      }
+    }
+  }
+
+  .price-summary {
+    background: #f5f5f5;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-top: 1.5rem;
+
+    h3 {
+      margin: 0 0 1rem 0;
+      color: #333;
+    }
+
+    .summary-details {
+      margin-bottom: 1rem;
+
+      .detail-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #e0e0e0;
+
+        .label {
+          font-weight: 500;
+          color: #666;
+        }
+
+        .value {
+          color: #333;
+        }
+      }
+    }
+
+    .price-total {
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #333;
+      border-top: 2px solid #e2bf55;
+      margin-top: 1rem;
+
+      .amount {
+        color: #e2bf55;
+      }
+    }
+
+    .shipping-estimate {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      color: #666;
+
+      .amount {
+        font-weight: 500;
+      }
+    }
+
+    .calculating {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 0;
+      color: #666;
+    }
+  }
+
+  mat-card-actions {
+    padding: 1.5rem;
+    display: flex;
+    justify-content: flex-end;
+
+    button {
+      padding: 0.75rem 2rem;
+      font-size: 1rem;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .frame-configurator {
+    margin: 1rem;
+
+    .size-inputs {
+      flex-direction: column;
+      align-items: stretch !important;
+
+      .size-separator {
+        display: none;
+      }
+    }
+  }
+}

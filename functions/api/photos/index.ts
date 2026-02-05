@@ -72,6 +72,7 @@ export async function onRequestGet(context: any): Promise<Response> {
         FROM photos_categories pc
         INNER JOIN categories c ON pc.category_id = c.id
         WHERE pc.photo_id IN (${placeholders})
+          AND c.is_active = 1
         ORDER BY c.name
       `, photoIds);
       

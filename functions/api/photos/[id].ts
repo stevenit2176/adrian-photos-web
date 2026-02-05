@@ -50,12 +50,13 @@ export async function onRequestGet(context: any): Promise<Response> {
       return errorResponse('Photo not found', 404, 'NOT_FOUND');
     }
 
-    // Get categories for this photo
+    // Get categories for this photo (only active)
     const categories = await queryAll(env.DB, `
       SELECT c.id, c.name, c.slug
       FROM categories c
       INNER JOIN photos_categories pc ON c.id = pc.category_id
       WHERE pc.photo_id = ?
+        AND c.is_active = 1
       ORDER BY c.name
     `, [photoId]);
 
@@ -171,12 +172,13 @@ export async function onRequestPut(context: any): Promise<Response> {
       WHERE p.id = ?
     `, [photoId]);
 
-    // Get categories for this photo
+    // Get categories for this photo (only active)
     const categories = await queryAll(env.DB, `
       SELECT c.id, c.name
       FROM categories c
       INNER JOIN photos_categories pc ON c.id = pc.category_id
       WHERE pc.photo_id = ?
+        AND c.is_active = 1
     `, [photoId]);
 
     return successResponse({ 

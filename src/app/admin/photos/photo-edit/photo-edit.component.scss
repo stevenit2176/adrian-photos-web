@@ -1,12 +1,7 @@
-.photo-edit-container {
-  min-height: calc(100vh - 64px);
-  padding: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
+@import '../../styles/admin-page-base';
 
-  @media (max-width: 768px) {
-    padding: 1rem;
-  }
+.admin-page {
+  max-width: 1200px;
 }
 
 .loading-container {
@@ -23,32 +18,7 @@
   }
 }
 
-.edit-content {
-  animation: fadeIn 0.3s ease-in;
-}
-
 mat-card {
-  mat-card-header {
-    margin-bottom: 1.5rem;
-
-    .header-content {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      width: 100%;
-
-      .back-button {
-        margin: 0;
-      }
-
-      h1 {
-        margin: 0;
-        font-size: 2rem;
-        color: #333;
-      }
-    }
-  }
-
   mat-card-content {
     padding: 1.5rem !important;
   }
